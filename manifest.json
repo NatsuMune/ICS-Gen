@@ -1,0 +1,17 @@
+{
+  "name": "ICS-Gen",
+  "short_name": "ICS-Gen",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#4facfe",
+  "description": "Instantly convert your travel plans into calendar events.",
+  "icons": [
+    {
+      "src": "icons/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+

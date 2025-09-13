@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Itinerary to .ics Converter</title>
+    <title>ICS-Gen: Itinerary to .ics Converter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4facfe" />
+    <link rel="apple-touch-icon" href="icons/icon.png" />
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -121,10 +124,37 @@
     <div class="w-full max-w-2xl mx-auto">
       <div class="glass-card p-6 sm:p-8">
         <div class="text-center mb-8">
+          <!-- High quality icon/logo for ICS-Gen -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="h-12 w-12 mx-auto mb-2"
+          >
+            <defs>
+              <linearGradient
+                id="logo-gradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" style="stop-color: #4facfe" />
+                <stop offset="100%" style="stop-color: #00f2fe" />
+              </linearGradient>
+            </defs>
+            <path
+              fill="url(#logo-gradient)"
+              d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"
+            />
+            <path
+              fill="white"
+              d="m15.28 12.8-1.72 3.45-1.72-3.45-3.45-1.72 3.45-1.72 1.72-3.45 1.72 3.45 3.45 1.72-3.45 1.72z"
+            />
+          </svg>
           <h1
             class="text-3xl sm:text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-2"
           >
-            Itinerary Assistant
+            ICS-Gen
           </h1>
           <p class="text-gray-500 dark:text-gray-400">
             Instantly convert your travel plans into calendar events.
@@ -364,6 +394,22 @@
       let eventsData = [];
       let imageBase64 = null;
 
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").then(
+            (registration) => {
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            },
+            (err) => {
+              console.log("ServiceWorker registration failed: ", err);
+            }
+          );
+        });
+      }
+
       // --- API Key Management ---
       function setupApiKey() {
         const storedKey = localStorage.getItem("openrouter_api_key");
@@ -525,7 +571,7 @@
             "Content-Type": "application/json",
             Authorization: `Bearer ${apiKey}`,
             "HTTP-Referer": window.location.href,
-            "X-Title": "Itinerary Parser",
+            "X-Title": "ICS-Gen",
           },
           body: JSON.stringify(payload),
         });
@@ -650,7 +696,7 @@
         return [
           "BEGIN:VCALENDAR",
           "VERSION:2.0",
-          "PRODID:-//ItineraryApp//EN",
+          "PRODID:-//ICS-Gen//EN",
           ...eventStrings,
           "END:VCALENDAR",
         ].join("\r\n");
