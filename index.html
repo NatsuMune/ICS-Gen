@@ -120,8 +120,33 @@
     </style>
   </head>
   <body
-    class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300"
+    class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300 relative"
   >
+    <!-- Settings Button -->
+    <button
+      id="settings-btn"
+      class="fixed top-4 right-4 z-40 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+      title="Settings"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-gray-700 dark:text-gray-300"
+      >
+        <circle cx="12" cy="12" r="3"></circle>
+        <path
+          d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+        ></path>
+      </svg>
+    </button>
+
     <div class="w-full max-w-2xl mx-auto">
       <div class="glass-card p-6 sm:p-8">
         <div class="text-center mb-8">
@@ -352,6 +377,94 @@
       </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div
+      id="settings-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden"
+    >
+      <div class="glass-card p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            Settings
+          </h2>
+          <button
+            id="close-settings-btn"
+            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">
+          Configure your OpenRouter API key and model settings. Your data is
+          stored securely in your browser's local storage.
+        </p>
+        <div class="space-y-4">
+          <div>
+            <label
+              for="settings-api-key-input"
+              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+              >OpenRouter API Key</label
+            >
+            <input
+              type="password"
+              id="settings-api-key-input"
+              class="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 transition-all"
+              placeholder="sk-or-v1-..."
+            />
+            <p
+              id="settings-api-key-error"
+              class="text-red-500 text-sm mt-2 hidden"
+            >
+              Please enter a valid OpenRouter API key.
+            </p>
+          </div>
+          <div>
+            <label
+              for="settings-model-input"
+              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+              >Model Name</label
+            >
+            <input
+              type="text"
+              id="settings-model-input"
+              class="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 transition-all"
+              placeholder="openrouter/sonoma-dusk-alpha"
+            />
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+              Default: openrouter/sonoma-dusk-alpha
+            </p>
+          </div>
+        </div>
+        <div class="mt-6 flex space-x-3">
+          <button
+            id="save-settings-btn"
+            class="flex-1 text-white font-bold py-3 px-4 rounded-lg btn-gradient focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Save Settings
+          </button>
+          <button
+            id="cancel-settings-btn"
+            class="flex-1 text-gray-700 dark:text-gray-300 font-bold py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- API Key Modal -->
     <div
       id="api-key-modal"
@@ -415,6 +528,20 @@
       const saveApiKeyBtn = document.getElementById("save-api-key-btn");
       const apiKeyError = document.getElementById("api-key-error");
       const resetBtn = document.getElementById("reset-btn");
+      const settingsBtn = document.getElementById("settings-btn");
+      const settingsModal = document.getElementById("settings-modal");
+      const closeSettingsBtn = document.getElementById("close-settings-btn");
+      const settingsApiKeyInput = document.getElementById(
+        "settings-api-key-input"
+      );
+      const settingsModelInput = document.getElementById(
+        "settings-model-input"
+      );
+      const saveSettingsBtn = document.getElementById("save-settings-btn");
+      const cancelSettingsBtn = document.getElementById("cancel-settings-btn");
+      const settingsApiKeyError = document.getElementById(
+        "settings-api-key-error"
+      );
 
       let eventsData = [];
       let imageBase64 = null;
@@ -457,7 +584,70 @@
         });
       }
 
-      document.addEventListener("DOMContentLoaded", setupApiKey);
+      // --- Settings Management ---
+      function setupSettings() {
+        // Load settings from localStorage
+        const storedApiKey = localStorage.getItem("openrouter_api_key") || "";
+        const storedModel =
+          localStorage.getItem("openrouter_model") ||
+          "openrouter/sonoma-dusk-alpha";
+
+        settingsApiKeyInput.value = storedApiKey;
+        settingsModelInput.value = storedModel;
+
+        // Settings button
+        settingsBtn.addEventListener("click", () => {
+          settingsModal.classList.remove("hidden");
+        });
+
+        // Close settings modal
+        closeSettingsBtn.addEventListener("click", () => {
+          settingsModal.classList.add("hidden");
+        });
+
+        // Cancel settings
+        cancelSettingsBtn.addEventListener("click", () => {
+          settingsModal.classList.add("hidden");
+        });
+
+        // Save settings
+        saveSettingsBtn.addEventListener("click", () => {
+          const apiKey = settingsApiKeyInput.value.trim();
+          const model = settingsModelInput.value.trim();
+
+          // Validate API key if provided
+          if (apiKey && !apiKey.startsWith("sk-or-v1-")) {
+            settingsApiKeyError.classList.remove("hidden");
+            settingsApiKeyInput.classList.add("border-red-500");
+            return;
+          }
+
+          // Save settings
+          if (apiKey) {
+            localStorage.setItem("openrouter_api_key", apiKey);
+          } else {
+            localStorage.removeItem("openrouter_api_key");
+          }
+
+          if (model) {
+            localStorage.setItem("openrouter_model", model);
+          } else {
+            localStorage.setItem(
+              "openrouter_model",
+              "openrouter/sonoma-dusk-alpha"
+            );
+          }
+
+          settingsModal.classList.add("hidden");
+          settingsApiKeyError.classList.add("hidden");
+          settingsApiKeyInput.classList.remove("border-red-500");
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setupApiKey();
+        setupSettings();
+      });
 
       // --- Drag and Drop Logic ---
       dropZone.addEventListener("dragover", (e) => {
@@ -593,7 +783,9 @@
       // Call to OpenRouter API
       async function callOpenRouterAPI(prompt, base64ImageData) {
         const apiKey = localStorage.getItem("openrouter_api_key");
-        const model = "openrouter/sonoma-dusk-alpha";
+        const model =
+          localStorage.getItem("openrouter_model") ||
+          "openrouter/sonoma-dusk-alpha";
         const url = "https://openrouter.ai/api/v1/chat/completions";
 
         const systemPrompt = `You are an intelligent assistant that parses text and images for travel itineraries. Your task is to extract event details into a structured JSON format. You MUST return a single JSON object with a key "events", which contains an array of event objects. The current year is ${new Date().getFullYear()}. Assume the current or next year if not specified. Identify IANA timezones (e.g., 'America/New_York'). For flights, the start time is in the departure city's timezone and the end time is in the arrival city's timezone. For flight events, the location MUST be the departure airport location (e.g., 'JFK, New York, NY'). All dates and times MUST be in 'YYYY-MM-DDTHH:mm:ss' local time format. Calculate a reasonable end time if it's missing. If crucial information is missing, make a reasonable guess and note it in the description. The summary should be concise. For flight events, the summary MUST be "Flight [DEPARTURE CITY] to [ARRIVAL CITY]". Use city names, not airport codes. For hotel events, the summary MUST be "Stay at [HOTEL NAME]". If no events are found, return an empty array for the "events" key. Each event object must have this structure: {"summary": "string", "dtstart": "YYYY-MM-DDTHH:mm:ss", "start_timezone": "IANA/Timezone", "dtend": "YYYY-MM-DDTHH:mm:ss", "end_timezone": "IANA/Timezone", "location": "string", "description": "string"}`;
