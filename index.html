@@ -574,6 +574,7 @@
           // Basic validation for OpenRouter key format
           if (key.startsWith("sk-or-v1-")) {
             localStorage.setItem("openrouter_api_key", key);
+            settingsApiKeyInput.value = key;
             apiKeyModal.classList.add("hidden");
             apiKeyError.classList.add("hidden");
             apiKeyInput.classList.remove("border-red-500");
