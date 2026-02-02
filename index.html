@@ -374,6 +374,14 @@
             Download All Events (.ics)
           </button>
         </div>
+
+        <div
+          id="api-error-log"
+          class="mt-8 p-4 bg-red-50 dark:bg-red-900/30 text-red-900 dark:text-red-200 rounded-lg hidden fade-in border border-red-200 dark:border-red-800/50"
+        >
+          <h3 class="font-semibold mb-2">API Error Details</h3>
+          <pre id="api-error-text" class="whitespace-pre-wrap text-sm"></pre>
+        </div>
       </div>
     </div>
 
@@ -515,6 +523,8 @@
       const resultsContainer = document.getElementById("results-container");
       const downloadContainer = document.getElementById("download-container");
       const errorMessage = document.getElementById("error-message");
+      const apiErrorLog = document.getElementById("api-error-log");
+      const apiErrorText = document.getElementById("api-error-text");
       const dropZone = document.getElementById("drop-zone");
       const uploadPrompt = document.getElementById("upload-prompt");
       const imagePreviewContainer = document.getElementById(
@@ -731,6 +741,7 @@
         downloadContainer.classList.add("hidden");
         loader.classList.add("hidden");
         hideError();
+        hideApiError();
         eventsData = [];
         generateBtn.disabled = false;
         generateBtn.classList.remove("opacity-50", "cursor-not-allowed");
@@ -755,6 +766,7 @@
         }
 
         hideError();
+        hideApiError();
         resultsContainer.classList.add("hidden");
         resultsContainer.innerHTML = "";
         downloadContainer.classList.add("hidden");
@@ -766,6 +778,7 @@
           await callOpenRouterAPI(text, imageBase64);
         } catch (error) {
           console.error("API call failed:", error);
+          showApiError(error.message);
           if (error.message.includes("Authentication failed")) {
             showError(error.message);
             apiKeyModal.classList.remove("hidden");
@@ -926,6 +939,16 @@
 
       function hideError() {
         errorMessage.classList.add("hidden");
+      }
+
+      function showApiError(message) {
+        apiErrorText.textContent = message;
+        apiErrorLog.classList.remove("hidden");
+      }
+
+      function hideApiError() {
+        apiErrorLog.classList.add("hidden");
+        apiErrorText.textContent = "";
       }
 
       // ICS Generation and Download
