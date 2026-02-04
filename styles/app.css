@@ -98,16 +98,32 @@ body.app-body {
   z-index: 1;
   max-width: 1180px;
   margin: 0 auto;
+  margin-top: 80px;
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.1fr);
   gap: 32px;
   align-items: start;
 }
 
-.icon-button {
+.app-shell.tutorial-dismissed {
+  grid-template-columns: minmax(0, 860px);
+  justify-content: center;
+}
+
+.app-shell.tutorial-dismissed .workspace {
+  width: 100%;
+}
+
+.utility-buttons {
   position: fixed;
   top: 24px;
   right: 24px;
+  display: inline-flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.icon-button {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -120,7 +136,6 @@ body.app-body {
   box-shadow: 0 12px 24px rgba(15, 20, 20, 0.12);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  z-index: 5;
 }
 
 .icon-button:hover {
@@ -146,6 +161,33 @@ body.app-body {
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-dismiss {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(30, 42, 43, 0.2);
+  background: rgba(255, 255, 255, 0.75);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-dismiss:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(15, 20, 20, 0.15);
 }
 
 .hero::after {
@@ -262,6 +304,14 @@ body.app-body {
   margin-bottom: 20px;
 }
 
+.panel-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 .panel-header h2 {
   margin: 0;
   font-size: 1.4rem;
@@ -317,6 +367,39 @@ body.app-body {
   margin-bottom: 8px;
   font-weight: 600;
   color: var(--ink);
+}
+
+.input-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(30, 42, 43, 0.12);
+}
+
+.toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.toggle-btn.is-active {
+  background: var(--accent-2);
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(15, 20, 20, 0.2);
+}
+
+.input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .field {
@@ -419,7 +502,20 @@ body.app-body {
   border-radius: 20px;
   padding: 24px;
   background: rgba(255, 255, 255, 0.75);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.drop-zone:hover {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(28, 124, 124, 0.18);
+  transform: translateY(-1px);
+}
+
+.drop-zone:active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.22);
+  transform: translateY(0);
 }
 
 .drag-over {
@@ -452,7 +548,6 @@ body.app-body {
 
 .upload-link {
   color: var(--accent);
-  cursor: pointer;
 }
 
 .upload-hint {
@@ -793,6 +888,7 @@ body.app-body {
 
   .app-shell {
     grid-template-columns: 1fr;
+    margin-top: 72px;
   }
 
   .hero::after {
@@ -813,6 +909,10 @@ body.app-body {
     padding: 20px;
   }
 
+  .app-shell {
+    margin-top: 64px;
+  }
+
   .action-row {
     flex-direction: column;
   }
@@ -822,10 +922,11 @@ body.app-body {
     justify-content: center;
   }
 
-  .icon-button {
+  .utility-buttons {
     top: 16px;
     right: 16px;
   }
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -870,6 +971,12 @@ body.app-body {
     background: linear-gradient(140deg, rgba(22, 32, 29, 0.95), rgba(18, 25, 23, 0.9));
   }
 
+  .hero-dismiss {
+    background: rgba(22, 32, 29, 0.75);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--muted);
+  }
+
   .info-card {
     background: rgba(22, 32, 29, 0.85);
   }
@@ -894,6 +1001,11 @@ body.app-body {
     background: rgba(17, 24, 22, 0.9);
     border-color: rgba(255, 255, 255, 0.12);
     color: var(--ink);
+  }
+
+  .input-toggle {
+    background: rgba(17, 24, 22, 0.7);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .field::placeholder {

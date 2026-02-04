@@ -1,6 +1,14 @@
 export function getDom() {
   return {
+    appShell: document.querySelector(".app-shell"),
+    hero: document.getElementById("tutorial-hero"),
+    helpBtn: document.getElementById("help-btn"),
+    dismissHeroBtn: document.getElementById("dismiss-hero-btn"),
     textInput: document.getElementById("text-input"),
+    textInputPanel: document.getElementById("text-input-panel"),
+    imageInputPanel: document.getElementById("image-input-panel"),
+    modeTextBtn: document.getElementById("mode-text-btn"),
+    modeImageBtn: document.getElementById("mode-image-btn"),
     imageUploadInput: document.getElementById("image-upload-input"),
     generateBtn: document.getElementById("generate-btn"),
     downloadBtn: document.getElementById("download-btn"),

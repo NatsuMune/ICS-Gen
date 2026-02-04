@@ -1,4 +1,5 @@
 import { buildItineraryPrompt } from "../../domain/itineraryPrompt.js";
+import { parseModelJson } from "../../utils/parseModelJson.js";
 
 export function createOpenAICompatibleProvider({
   fetchImpl = window.fetch.bind(window),
@@ -76,8 +77,13 @@ export function createOpenAICompatibleProvider({
 
     if (result.choices?.[0]?.message?.content) {
       const jsonText = result.choices[0].message.content;
-      const parsedData = JSON.parse(jsonText);
-      return parsedData.events || [];
+      try {
+        const parsedData = parseModelJson(jsonText);
+        return parsedData.events || [];
+      } catch (error) {
+        console.error("Failed to parse model JSON:", error, jsonText);
+        throw new Error("Provider returned invalid JSON. Please try again.");
+      }
     }
 
     throw new Error("Unexpected API response structure.");

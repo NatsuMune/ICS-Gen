@@ -6,19 +6,8 @@ export function createImageInputController({
   imagePreview,
   imageName,
   removeImageBtn,
-  textInput,
 }) {
   let imageBase64 = null;
-
-  const setTextDisabled = (isDisabled) => {
-    textInput.disabled = isDisabled;
-    if (isDisabled) {
-      textInput.value = "";
-      textInput.classList.add("field-disabled");
-    } else {
-      textInput.classList.remove("field-disabled");
-    }
-  };
 
   const handleFile = (file) => {
     if (file && file.type.startsWith("image/")) {
@@ -29,7 +18,6 @@ export function createImageInputController({
         imageName.textContent = file.name;
         uploadPrompt.classList.add("hidden");
         imagePreviewContainer.classList.remove("hidden");
-        setTextDisabled(true);
       };
       reader.readAsDataURL(file);
     }
@@ -42,7 +30,6 @@ export function createImageInputController({
     imageName.textContent = "";
     uploadPrompt.classList.remove("hidden");
     imagePreviewContainer.classList.add("hidden");
-    setTextDisabled(false);
   };
 
   dropZone.addEventListener("dragover", (event) => {
@@ -71,6 +58,11 @@ export function createImageInputController({
   imageUploadInput.addEventListener("change", (event) =>
     handleFile(event.target.files[0])
   );
+
+  dropZone.addEventListener("click", (event) => {
+    if (event.target.closest("#remove-image-btn")) return;
+    imageUploadInput.click();
+  });
 
   removeImageBtn.addEventListener("click", clearImage);
 

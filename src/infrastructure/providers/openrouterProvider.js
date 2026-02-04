@@ -1,4 +1,5 @@
 import { buildItineraryPrompt } from "../../domain/itineraryPrompt.js";
+import { parseModelJson } from "../../utils/parseModelJson.js";
 
 export function createOpenRouterProvider({
   fetchImpl = window.fetch.bind(window),
@@ -37,6 +38,8 @@ export function createOpenRouterProvider({
       model,
       messages,
       response_format: { type: "json_object" },
+      reasoning: { effort: "none" },
+      plugins: [{ id: "response-healing" }],
     };
 
     const response = await fetchImpl(apiUrl, {
@@ -65,13 +68,38 @@ export function createOpenRouterProvider({
 
     const result = await response.json();
 
-    if (result.choices?.[0]?.message?.content) {
-      const jsonText = result.choices[0].message.content;
-      const parsedData = JSON.parse(jsonText);
-      return parsedData.events || [];
+    const message = result.choices?.[0]?.message;
+    if (message) {
+      let jsonText = message.content;
+
+      if (!jsonText && message.reasoning) {
+        jsonText = message.reasoning;
+      }
+
+      if (!jsonText && Array.isArray(message.reasoning_details)) {
+        jsonText = message.reasoning_details
+          .map((detail) => detail.text || "")
+          .join("\n");
+      }
+
+      if (!jsonText) {
+        throw new Error(
+          "Model returned no JSON content. Try a different model or disable reasoning mode."
+        );
+      }
+
+      try {
+        const parsedData = parseModelJson(jsonText);
+        return parsedData.events || [];
+      } catch (error) {
+        console.error("Failed to parse model JSON:", error, jsonText);
+        throw new Error(
+          "Model did not return valid JSON. Try a different model or disable reasoning mode."
+        );
+      }
     }
 
-    throw new Error("Unexpected API response structure.");
+    throw new Error("Provider returned an unexpected response shape.");
   }
 
   return {

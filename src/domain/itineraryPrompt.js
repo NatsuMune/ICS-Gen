@@ -16,6 +16,7 @@ export function buildItineraryPrompt(nowValue) {
           - For flight events, the summary MUST be "Flight [DEPARTURE CITY] to [ARRIVAL CITY]". Use city names, not airport codes.
           - For hotel events, the summary MUST be "Stay at [HOTEL NAME]".
           - If no events are found, return an empty array for the "events" key.
+          - Return ONLY valid JSON in the assistant content. Do not include any reasoning, commentary, or code fences.
 
           Each event object must have this structure:
           {
