@@ -1,0 +1,13 @@
+{
+  "name": "ics-gen",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.2.19",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0",
+    "vitest": "^1.6.0"
+  }
+}

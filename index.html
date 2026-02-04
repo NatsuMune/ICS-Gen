@@ -4,141 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ICS-Gen: Itinerary to .ics Converter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="styles/app.css" />
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#4facfe" />
+    <meta name="theme-color" content="#ff6b35" />
     <link rel="apple-touch-icon" href="icons/icon.png" />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        background: #f0f2f5;
-      }
-
-      /* --- Glassmorphism Card --- */
-      .glass-card {
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-        transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      /* --- Custom Gradient Button --- */
-      .btn-gradient {
-        background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
-        transition: all 0.3s ease;
-        background-size: 200% auto;
-      }
-
-      .btn-gradient:hover {
-        background-position: right center; /* change the direction of the change here */
-        box-shadow: 0 4px 15px 0 rgba(79, 172, 254, 0.45);
-      }
-
-      .btn-gradient-green {
-        background-image: linear-gradient(to right, #2af598 0%, #009efd 100%);
-      }
-
-      .btn-gradient-green:hover {
-        box-shadow: 0 4px 15px 0 rgba(42, 245, 152, 0.45);
-      }
-
-      /* --- Custom Loader --- */
-      .custom-loader {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: conic-gradient(#0000 10%, #4facfe);
-        mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
-        -webkit-mask: radial-gradient(
-          farthest-side,
-          #0000 calc(100% - 8px),
-          #000 0
-        );
-        animation: s3 1s infinite linear;
-      }
-      @keyframes s3 {
-        to {
-          transform: rotate(1turn);
-        }
-      }
-
-      /* --- Animations --- */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-      }
-
-      .result-card {
-        animation: fadeIn 0.5s ease-out forwards;
-        opacity: 0;
-      }
-
-      /* Drag over effect for file upload */
-      .drag-over {
-        border-color: #4facfe;
-        background-color: #f0f9ff;
-      }
-
-      /* Input focus styles */
-      textarea:focus,
-      input[type="file"]:focus-within + label {
-        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
-      }
-
-      /* --- Dark Mode Styles --- */
-      @media (prefers-color-scheme: dark) {
-        body {
-          background: #111827; /* A dark gray-blue */
-        }
-        .glass-card {
-          background: rgba(31, 41, 55, 0.6); /* Darker semi-transparent */
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
-        }
-        .drag-over {
-          border-color: #4facfe;
-          background-color: rgba(79, 172, 254, 0.1);
-        }
-      }
-    </style>
   </head>
-  <body
-    class="flex items-center justify-center min-h-screen p-4 transition-colors duration-300 relative"
-  >
-    <!-- Settings Button -->
-    <button
-      id="settings-btn"
-      class="fixed top-4 right-4 z-40 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
-      title="Settings"
-    >
+  <body class="app-body">
+    <div class="bg-orb orb-1" aria-hidden="true"></div>
+    <div class="bg-orb orb-2" aria-hidden="true"></div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <button id="settings-btn" class="icon-button" title="Settings">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="text-gray-700 dark:text-gray-300"
       >
         <circle cx="12" cy="12" r="3"></circle>
         <path
@@ -147,14 +37,17 @@
       </svg>
     </button>
 
-    <div class="w-full max-w-2xl mx-auto">
-      <div class="glass-card p-6 sm:p-8">
-        <div class="text-center mb-8">
-          <!-- High quality icon/logo for ICS-Gen -->
+    <main class="app-shell">
+      <header class="hero">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span class="badge-text">ICS-Gen</span>
+        </div>
+        <div class="logo-mark">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
-            class="h-12 w-12 mx-auto mb-2"
+            class="logo-icon"
           >
             <defs>
               <linearGradient
@@ -164,8 +57,8 @@
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" style="stop-color: #4facfe" />
-                <stop offset="100%" style="stop-color: #00f2fe" />
+                <stop offset="0%" style="stop-color: #ff6b35" />
+                <stop offset="100%" style="stop-color: #1c7c7c" />
               </linearGradient>
             </defs>
             <path
@@ -177,232 +70,182 @@
               d="m15.28 12.8-1.72 3.45-1.72-3.45-3.45-1.72 3.45-1.72 1.72-3.45 1.72 3.45 3.45 1.72-3.45 1.72z"
             />
           </svg>
-          <h1
-            class="text-3xl sm:text-4xl font-extrabold text-gray-800 dark:text-gray-100 mb-2"
-          >
-            ICS-Gen
-          </h1>
-          <p class="text-gray-500 dark:text-gray-400">
-            Instantly convert your travel plans into calendar events.
-          </p>
         </div>
+        <h1 class="hero-title">Turn itineraries into calendar-ready events.</h1>
+        <p class="hero-subtitle">
+          Paste a trip plan or upload a screenshot. ICS-Gen turns it into clean,
+          downloadable .ics files in seconds.
+        </p>
+        <div class="hero-cards">
+          <div class="info-card">
+            <span class="info-title">Input</span>
+            <p>Paste text or drop an image.</p>
+          </div>
+          <div class="info-card">
+            <span class="info-title">Output</span>
+            <p>Review events, then export a single .ics.</p>
+          </div>
+          <div class="info-card">
+            <span class="info-title">Storage</span>
+            <p>Keys stay in your browser storage.</p>
+          </div>
+        </div>
+      </header>
 
-        <!-- Input Section -->
-        <div class="space-y-6">
-          <div>
-            <label
-              for="text-input"
-              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-              >Paste Itinerary Text</label
-            >
-            <textarea
-              id="text-input"
-              rows="6"
-              class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 shadow-sm"
-              placeholder="e.g., Your flight UA 345 departs from New York to San Francisco on Oct 26, 2025 at 8:00 AM..."
-            ></textarea>
+      <section class="workspace">
+        <div class="panel panel-editor">
+          <div class="panel-header">
+            <h2>1. Add your itinerary</h2>
+            <p>Start with text, then switch to image upload if needed.</p>
           </div>
 
-          <div class="relative">
-            <div class="absolute inset-0 flex items-center">
-              <span class="w-full border-t dark:border-gray-700"></span>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span
-                class="bg-white/0 px-2 text-gray-500 dark:text-gray-400 backdrop-blur-sm"
-                >OR</span
+          <label for="text-input" class="field-label">Paste Itinerary Text</label>
+          <textarea
+            id="text-input"
+            rows="6"
+            class="field field-textarea"
+            placeholder="e.g., Flight UA 345 departs New York to San Francisco on Oct 26, 2025 at 8:00 AM"
+          ></textarea>
+
+          <div class="divider"><span>OR</span></div>
+
+          <label for="image-upload-input" class="field-label">Upload an Image</label>
+          <div id="drop-zone" class="drop-zone">
+            <div id="upload-prompt" class="upload-prompt">
+              <svg
+                class="upload-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                aria-hidden="true"
               >
-            </div>
-          </div>
-
-          <div>
-            <label
-              for="image-upload"
-              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-              >Upload an Image</label
-            >
-            <div
-              id="drop-zone"
-              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl transition-colors duration-300"
-            >
-              <div id="upload-prompt" class="space-y-1 text-center">
-                <svg
-                  class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
-                  stroke="currentColor"
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
                   fill="none"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-                <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                  <label
-                    for="image-upload-input"
-                    class="relative cursor-pointer bg-transparent rounded-md font-medium text-blue-500 hover:text-blue-400 focus-within:outline-none"
-                    ><span>Upload a file</span
-                    ><input
-                      id="image-upload-input"
-                      name="image-upload"
-                      type="file"
-                      class="sr-only"
-                      accept="image/*"
-                  /></label>
-                  <p class="pl-1">or drag and drop</p>
-                </div>
-                <p class="text-xs text-gray-500 dark:text-gray-500">
-                  PNG, JPG, GIF up to 10MB
-                </p>
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+              <div class="upload-text">
+                <label for="image-upload-input" class="upload-link">
+                  Upload a file
+                  <input
+                    id="image-upload-input"
+                    name="image-upload"
+                    type="file"
+                    class="sr-only"
+                    accept="image/*"
+                  />
+                </label>
+                <span>or drag and drop</span>
               </div>
-              <div
-                id="image-preview-container"
-                class="hidden text-center relative"
-              >
-                <img
-                  id="image-preview"
-                  src=""
-                  alt="Image preview"
-                  class="max-h-32 mx-auto rounded-lg shadow-md"
-                />
-                <p
-                  id="image-name"
-                  class="text-sm mt-2 text-gray-600 dark:text-gray-300 font-medium"
-                ></p>
-                <button
-                  id="remove-image-btn"
-                  class="mt-2 text-xs text-red-500 hover:text-red-400 font-semibold transition-transform transform hover:scale-110"
-                >
-                  Remove
-                </button>
-              </div>
+              <p class="upload-hint">PNG, JPG, GIF up to 10MB</p>
+            </div>
+            <div id="image-preview-container" class="image-preview hidden">
+              <img
+                id="image-preview"
+                src=""
+                alt="Image preview"
+                class="image-thumb"
+              />
+              <p id="image-name" class="image-name"></p>
+              <button id="remove-image-btn" class="link-button">
+                Remove image
+              </button>
             </div>
           </div>
         </div>
 
-        <div class="mt-8 flex flex-row space-x-3">
-          <button
-            id="generate-btn"
-            class="flex-1 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center btn-gradient"
-          >
+        <div class="panel panel-actions">
+          <div class="action-row">
+            <button id="generate-btn" class="btn btn-primary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v5" />
+                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                <path
+                  d="m10 18-3.13-3.13a.5.5 0 0 1 0-.7l3.13-3.13a.5.5 0 0 1 .7 0l.2.2a.5.5 0 0 1 0 .7L8.9 14l1.9 1.9a.5.5 0 0 1 0 .7l-.2.2a.5.5 0 0 1-.7 0Z"
+                />
+                <path d="M6 14h5" />
+              </svg>
+              Parse Itinerary
+            </button>
+            <button id="reset-btn" class="btn btn-secondary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"
+                ></path>
+                <polyline points="9 7 14 12 9 17"></polyline>
+              </svg>
+              Reset
+            </button>
+          </div>
+          <div id="loader" class="status loading hidden fade-in">
+            <div class="custom-loader"></div>
+            <p>Parsing your itinerary...</p>
+          </div>
+          <div id="error-message" class="status error hidden fade-in"></div>
+        </div>
+
+        <div class="panel panel-results">
+          <div class="panel-header">
+            <h2>2. Review and download</h2>
+            <p>We will list each event so you can double check details.</p>
+          </div>
+          <div id="results-container" class="results-grid hidden"></div>
+          <div id="download-container" class="download hidden fade-in">
+            <button id="download-btn" class="btn btn-download">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download All Events (.ics)
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="settings-modal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <button id="close-settings-btn" class="icon-button icon-button-small">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
-            >
-              <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v5" />
-              <path d="14 2v4a2 2 0 0 0 2 2h4" />
-              <path
-                d="m10 18-3.13-3.13a.5.5 0 0 1 0-.7l3.13-3.13a.5.5 0 0 1 .7 0l.2.2a.5.5 0 0 1 0 .7L8.9 14l1.9 1.9a.5.5 0 0 1 0 .7l-.2.2a.5.5 0 0 1-.7 0Z"
-              />
-              <path d="M6 14h5" />
-            </svg>
-            Parse Itinerary
-          </button>
-          <button
-            id="reset-btn"
-            class="flex-1 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center bg-gray-500 hover:bg-gray-600"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
-            >
-              <path
-                d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"
-              ></path>
-              <polyline points="9 7 14 12 9 17"></polyline>
-            </svg>
-            Reset
-          </button>
-        </div>
-        <!-- Loading and Result Section -->
-        <div id="loader" class="mt-6 text-center hidden fade-in">
-          <div class="custom-loader mx-auto"></div>
-          <p class="mt-4 text-sm text-gray-600 dark:text-gray-400 font-medium">
-            Parsing your itinerary...
-          </p>
-        </div>
-
-        <div
-          id="error-message"
-          class="mt-6 p-4 bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 rounded-lg hidden fade-in font-semibold border border-red-200 dark:border-red-800/50"
-        ></div>
-
-        <div id="results-container" class="mt-8 space-y-4 hidden">
-          <!-- Event cards will be inserted here dynamically -->
-        </div>
-
-        <div id="download-container" class="mt-6 hidden fade-in">
-          <button
-            id="download-btn"
-            class="w-full text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center btn-gradient btn-gradient-green"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download All Events (.ics)
-          </button>
-        </div>
-
-        <div
-          id="api-error-log"
-          class="mt-8 p-4 bg-red-50 dark:bg-red-900/30 text-red-900 dark:text-red-200 rounded-lg hidden fade-in border border-red-200 dark:border-red-800/50"
-        >
-          <h3 class="font-semibold mb-2">API Error Details</h3>
-          <pre id="api-error-text" class="whitespace-pre-wrap text-sm"></pre>
-        </div>
-      </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div
-      id="settings-modal"
-      class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden"
-    >
-      <div class="glass-card p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Settings
-          </h2>
-          <button
-            id="close-settings-btn"
-            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -415,595 +258,138 @@
             </svg>
           </button>
         </div>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">
-          Configure your OpenRouter API key and model settings. Your data is
-          stored securely in your browser's local storage.
+        <p class="modal-subtitle">
+          Configure your provider, API key, and model settings. Your data stays
+          stored in your browser.
         </p>
-        <div class="space-y-4">
-          <div>
-            <label
-              for="settings-api-key-input"
-              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-              >OpenRouter API Key</label
+        <div class="modal-body">
+          <div class="field-group">
+            <label for="settings-provider-select" class="field-label"
+              >AI Provider</label
             >
-            <input
-              type="password"
-              id="settings-api-key-input"
-              class="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 transition-all"
-              placeholder="sk-or-v1-..."
-            />
-            <p
-              id="settings-api-key-error"
-              class="text-red-500 text-sm mt-2 hidden"
+            <select
+              id="settings-provider-select"
+              class="field field-select"
             >
-              Please enter a valid OpenRouter API key.
+              <option value="openrouter">OpenRouter</option>
+              <option value="openai-compatible">OpenAI-Compatible</option>
+            </select>
+            <p class="field-hint">
+              Currently supported: OpenRouter, OpenAI-Compatible
             </p>
           </div>
-          <div>
-            <label
-              for="settings-model-input"
-              class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-              >Model Name</label
-            >
-            <input
-              type="text"
-              id="settings-model-input"
-              class="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 transition-all"
-              placeholder="nvidia/nemotron-nano-12b-v2-vl:free"
-            />
-            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
-              Default: nvidia/nemotron-nano-12b-v2-vl:free
-            </p>
+          <div id="provider-config-fields" class="field-group hidden">
+            <div class="field-group">
+              <label
+                for="settings-provider-endpoint-input"
+                class="field-label"
+                >Provider Endpoint</label
+              >
+              <input
+                type="text"
+                id="settings-provider-endpoint-input"
+                class="field field-input"
+                placeholder="https://api.example.com/v1/chat/completions"
+              />
+            </div>
+            <div class="field-group">
+              <label
+                for="settings-provider-api-key-input"
+                class="field-label"
+                >Provider API Key</label
+              >
+              <input
+                type="password"
+                id="settings-provider-api-key-input"
+                class="field field-input"
+                placeholder="sk-..."
+              />
+            </div>
+            <div class="field-group">
+              <label
+                for="settings-provider-model-input"
+                class="field-label"
+                >Provider Model</label
+              >
+              <input
+                type="text"
+                id="settings-provider-model-input"
+                class="field field-input"
+                placeholder="gpt-4o-mini"
+              />
+            </div>
+          </div>
+          <div id="openrouter-config-fields" class="field-group">
+            <div class="field-group">
+              <label for="settings-api-key-input" class="field-label"
+                >OpenRouter API Key</label
+              >
+              <input
+                type="password"
+                id="settings-api-key-input"
+                class="field field-input"
+                placeholder="sk-or-v1-..."
+              />
+              <p id="settings-api-key-error" class="field-error hidden">
+                Please enter a valid OpenRouter API key.
+              </p>
+            </div>
+            <div class="field-group">
+              <label for="settings-model-input" class="field-label"
+                >Model Name</label
+              >
+              <input
+                type="text"
+                id="settings-model-input"
+                class="field field-input"
+                placeholder="nvidia/nemotron-nano-12b-v2-vl:free"
+              />
+              <p class="field-hint">
+                Default: nvidia/nemotron-nano-12b-v2-vl:free
+              </p>
+            </div>
           </div>
         </div>
-        <div class="mt-6 flex space-x-3">
-          <button
-            id="save-settings-btn"
-            class="flex-1 text-white font-bold py-3 px-4 rounded-lg btn-gradient focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
+        <div class="modal-actions">
+          <button id="save-settings-btn" class="btn btn-primary">
             Save Settings
           </button>
-          <button
-            id="cancel-settings-btn"
-            class="flex-1 text-gray-700 dark:text-gray-300 font-bold py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all"
-          >
+          <button id="cancel-settings-btn" class="btn btn-secondary">
             Cancel
           </button>
         </div>
       </div>
     </div>
 
-    <!-- API Key Modal -->
-    <div
-      id="api-key-modal"
-      class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden"
-    >
-      <div class="glass-card p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-md">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-          Enter API Key
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">
+    <div id="api-key-modal" class="modal hidden">
+      <div class="modal-card">
+        <h2>Enter API Key</h2>
+        <p class="modal-subtitle">
           Please provide your OpenRouter API key to use this service. Your key
           is stored securely in your browser's local storage.
         </p>
-        <div>
-          <label
-            for="api-key-input"
-            class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+        <div class="modal-body">
+          <label for="api-key-input" class="field-label"
             >OpenRouter API Key</label
           >
           <input
             type="password"
             id="api-key-input"
-            class="w-full p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 transition-all"
+            class="field field-input"
             placeholder="sk-or-v1-..."
           />
-          <p id="api-key-error" class="text-red-500 text-sm mt-2 hidden">
+          <p id="api-key-error" class="field-error hidden">
             Please enter a valid OpenRouter API key.
           </p>
         </div>
-        <div class="mt-6">
-          <button
-            id="save-api-key-btn"
-            class="w-full text-white font-bold py-3 px-4 rounded-lg btn-gradient focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
+        <div class="modal-actions">
+          <button id="save-api-key-btn" class="btn btn-primary">
             Save and Continue
           </button>
         </div>
       </div>
     </div>
 
-    <script>
-      // DOM Elements
-      const textInput = document.getElementById("text-input");
-      const imageUploadInput = document.getElementById("image-upload-input");
-      const generateBtn = document.getElementById("generate-btn");
-      const downloadBtn = document.getElementById("download-btn");
-      const loader = document.getElementById("loader");
-      const resultsContainer = document.getElementById("results-container");
-      const downloadContainer = document.getElementById("download-container");
-      const errorMessage = document.getElementById("error-message");
-      const apiErrorLog = document.getElementById("api-error-log");
-      const apiErrorText = document.getElementById("api-error-text");
-      const dropZone = document.getElementById("drop-zone");
-      const uploadPrompt = document.getElementById("upload-prompt");
-      const imagePreviewContainer = document.getElementById(
-        "image-preview-container"
-      );
-      const imagePreview = document.getElementById("image-preview");
-      const imageName = document.getElementById("image-name");
-      const removeImageBtn = document.getElementById("remove-image-btn");
-      const apiKeyModal = document.getElementById("api-key-modal");
-      const apiKeyInput = document.getElementById("api-key-input");
-      const saveApiKeyBtn = document.getElementById("save-api-key-btn");
-      const apiKeyError = document.getElementById("api-key-error");
-      const resetBtn = document.getElementById("reset-btn");
-      const settingsBtn = document.getElementById("settings-btn");
-      const settingsModal = document.getElementById("settings-modal");
-      const closeSettingsBtn = document.getElementById("close-settings-btn");
-      const settingsApiKeyInput = document.getElementById(
-        "settings-api-key-input"
-      );
-      const settingsModelInput = document.getElementById(
-        "settings-model-input"
-      );
-      const saveSettingsBtn = document.getElementById("save-settings-btn");
-      const cancelSettingsBtn = document.getElementById("cancel-settings-btn");
-      const settingsApiKeyError = document.getElementById(
-        "settings-api-key-error"
-      );
-
-      let eventsData = [];
-      let imageBase64 = null;
-
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/sw.js").then(
-            (registration) => {
-              console.log(
-                "ServiceWorker registration successful with scope: ",
-                registration.scope
-              );
-            },
-            (err) => {
-              console.log("ServiceWorker registration failed: ", err);
-            }
-          );
-        });
-      }
-
-      // --- API Key Management ---
-      function setupApiKey() {
-        const storedKey = localStorage.getItem("openrouter_api_key");
-        if (!storedKey) {
-          apiKeyModal.classList.remove("hidden");
-        }
-
-        saveApiKeyBtn.addEventListener("click", () => {
-          const key = apiKeyInput.value.trim();
-          // Basic validation for OpenRouter key format
-          if (key.startsWith("sk-or-v1-")) {
-            localStorage.setItem("openrouter_api_key", key);
-            settingsApiKeyInput.value = key;
-            apiKeyModal.classList.add("hidden");
-            apiKeyError.classList.add("hidden");
-            apiKeyInput.classList.remove("border-red-500");
-          } else {
-            apiKeyError.classList.remove("hidden");
-            apiKeyInput.classList.add("border-red-500");
-          }
-        });
-      }
-
-      // --- Settings Management ---
-      function setupSettings() {
-        // Load settings from localStorage
-        const storedApiKey = localStorage.getItem("openrouter_api_key") || "";
-        const storedModel =
-          localStorage.getItem("openrouter_model") ||
-          "nvidia/nemotron-nano-12b-v2-vl:free";
-
-        settingsApiKeyInput.value = storedApiKey;
-        settingsModelInput.value = storedModel;
-
-        // Settings button
-        settingsBtn.addEventListener("click", () => {
-          settingsModal.classList.remove("hidden");
-        });
-
-        // Close settings modal
-        closeSettingsBtn.addEventListener("click", () => {
-          settingsModal.classList.add("hidden");
-        });
-
-        // Cancel settings
-        cancelSettingsBtn.addEventListener("click", () => {
-          settingsModal.classList.add("hidden");
-        });
-
-        // Save settings
-        saveSettingsBtn.addEventListener("click", () => {
-          const apiKey = settingsApiKeyInput.value.trim();
-          const model = settingsModelInput.value.trim();
-
-          // Validate API key if provided
-          if (apiKey && !apiKey.startsWith("sk-or-v1-")) {
-            settingsApiKeyError.classList.remove("hidden");
-            settingsApiKeyInput.classList.add("border-red-500");
-            return;
-          }
-
-          // Save settings
-          if (apiKey) {
-            localStorage.setItem("openrouter_api_key", apiKey);
-          } else {
-            localStorage.removeItem("openrouter_api_key");
-          }
-
-          if (model) {
-            localStorage.setItem("openrouter_model", model);
-          } else {
-            localStorage.setItem(
-              "openrouter_model",
-              "nvidia/nemotron-nano-12b-v2-vl:free"
-            );
-          }
-
-          settingsModal.classList.add("hidden");
-          settingsApiKeyError.classList.add("hidden");
-          settingsApiKeyInput.classList.remove("border-red-500");
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        setupApiKey();
-        setupSettings();
-      });
-
-      // --- Drag and Drop Logic ---
-      dropZone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.classList.add("drag-over");
-      });
-      dropZone.addEventListener("dragleave", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.classList.remove("drag-over");
-      });
-      dropZone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.classList.remove("drag-over");
-        const files = e.dataTransfer.files;
-        if (files.length) {
-          imageUploadInput.files = files;
-          handleFile(files[0]);
-        }
-      });
-
-      // Image upload handling
-      const handleFile = (file) => {
-        if (file && file.type.startsWith("image/")) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            imageBase64 = event.target.result.split(",")[1];
-            imagePreview.src = event.target.result;
-            imageName.textContent = file.name;
-            uploadPrompt.classList.add("hidden");
-            imagePreviewContainer.classList.remove("hidden");
-            textInput.disabled = true;
-            textInput.value = "";
-            textInput.classList.add(
-              "bg-gray-100",
-              "dark:bg-gray-800",
-              "cursor-not-allowed"
-            );
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-      imageUploadInput.addEventListener("change", (e) =>
-        handleFile(e.target.files[0])
-      );
-
-      removeImageBtn.addEventListener("click", () => {
-        imageBase64 = null;
-        imageUploadInput.value = "";
-        imagePreview.src = "";
-        imageName.textContent = "";
-        uploadPrompt.classList.remove("hidden");
-        imagePreviewContainer.classList.add("hidden");
-        textInput.disabled = false;
-        textInput.classList.remove(
-          "bg-gray-100",
-          "dark:bg-gray-800",
-          "cursor-not-allowed"
-        );
-      });
-
-      function resetForm() {
-        textInput.value = "";
-        imageBase64 = null;
-        imageUploadInput.value = "";
-        imagePreview.src = "";
-        imageName.textContent = "";
-        uploadPrompt.classList.remove("hidden");
-        imagePreviewContainer.classList.add("hidden");
-        textInput.disabled = false;
-        textInput.classList.remove(
-          "bg-gray-100",
-          "dark:bg-gray-800",
-          "cursor-not-allowed"
-        );
-        resultsContainer.classList.add("hidden");
-        resultsContainer.innerHTML = "";
-        downloadContainer.classList.add("hidden");
-        loader.classList.add("hidden");
-        hideError();
-        hideApiError();
-        eventsData = [];
-        generateBtn.disabled = false;
-        generateBtn.classList.remove("opacity-50", "cursor-not-allowed");
-      }
-
-      resetBtn.addEventListener("click", resetForm);
-
-      // Main function to handle generation
-      generateBtn.addEventListener("click", async () => {
-        const apiKey = localStorage.getItem("openrouter_api_key");
-        if (!apiKey) {
-          showError("Please set your OpenRouter API key first.");
-          apiKeyModal.classList.remove("hidden");
-          return;
-        }
-
-        const text = textInput.value.trim();
-
-        if (!text && !imageBase64) {
-          showError("Please provide some text or upload an image.");
-          return;
-        }
-
-        hideError();
-        hideApiError();
-        resultsContainer.classList.add("hidden");
-        resultsContainer.innerHTML = "";
-        downloadContainer.classList.add("hidden");
-        loader.classList.remove("hidden");
-        generateBtn.disabled = true;
-        generateBtn.classList.add("opacity-50", "cursor-not-allowed");
-
-        try {
-          await callOpenRouterAPI(text, imageBase64);
-        } catch (error) {
-          console.error("API call failed:", error);
-          showApiError(error.message);
-          if (error.message.includes("Authentication failed")) {
-            showError(error.message);
-            apiKeyModal.classList.remove("hidden");
-          } else {
-            showError(
-              "Failed to parse itinerary. Please check the input or try again."
-            );
-          }
-        } finally {
-          loader.classList.add("hidden");
-          generateBtn.disabled = false;
-          generateBtn.classList.remove("opacity-50", "cursor-not-allowed");
-        }
-      });
-
-      // Call to OpenRouter API
-      async function callOpenRouterAPI(prompt, base64ImageData) {
-        const apiKey = localStorage.getItem("openrouter_api_key");
-        const model =
-          localStorage.getItem("openrouter_model") ||
-          "nvidia/nemotron-nano-12b-v2-vl:free";
-        const url = "https://openrouter.ai/api/v1/chat/completions";
-
-        const systemPrompt = `You are an intelligent assistant that parses text and images for travel itineraries.
-          Your task is to extract event details into a structured JSON format.
-
-          You MUST return a single JSON object with a key "events", which contains an array of event objects.
-
-          Rules:
-          - The current time is ${new Date()}. If the event year is not specified, assume the current or next year to make sure the event is happening in nearest future.
-          - Identify IANA timezones (e.g., 'America/New_York').
-          - For flights, the start time is in the departure city's timezone and the end time is in the arrival city's timezone.
-          - For flight events, the location MUST be the departure airport location (e.g., 'JFK, New York, NY').
-          - All dates and times MUST be in 'YYYY-MM-DDTHH:mm:ss' local time format.
-          - Calculate a reasonable end time if it's missing.
-          - If crucial information is missing, make a reasonable guess and note it in the description.
-          - The summary should be concise.
-          - For flight events, the summary MUST be "Flight [DEPARTURE CITY] to [ARRIVAL CITY]". Use city names, not airport codes.
-          - For hotel events, the summary MUST be "Stay at [HOTEL NAME]".
-          - If no events are found, return an empty array for the "events" key.
-
-          Each event object must have this structure:
-          {
-            "summary": "string",
-            "dtstart": "YYYY-MM-DDTHH:mm:ss",
-            "start_timezone": "IANA/Timezone",
-            "dtend": "YYYY-MM-DDTHH:mm:ss",
-            "end_timezone": "IANA/Timezone",
-            "location": "string",
-            "description": "string"
-          }`;
-
-        const userContent = [];
-        if (prompt) userContent.push({ type: "text", text: prompt });
-        if (base64ImageData)
-          userContent.push({
-            type: "image_url",
-            image_url: { url: `data:image/jpeg;base64,${base64ImageData}` },
-          });
-
-        const messages = [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userContent },
-        ];
-        const payload = {
-          model: model,
-          messages: messages,
-          response_format: { type: "json_object" },
-        };
-
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-            "HTTP-Referer": window.location.href,
-            "X-Title": "ICS-Gen",
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            localStorage.removeItem("openrouter_api_key");
-            throw new Error(
-              "Authentication failed. Your API key is invalid. Please enter a valid one."
-            );
-          }
-          const errorBody = await response.text();
-          throw new Error(
-            `API request failed with status ${response.status}: ${errorBody}`
-          );
-        }
-
-        const result = await response.json();
-
-        if (result.choices?.[0]?.message?.content) {
-          const jsonText = result.choices[0].message.content;
-          const parsedData = JSON.parse(jsonText);
-          eventsData = parsedData.events || [];
-          displayResults(eventsData);
-        } else {
-          console.log("Unexpected API response:", result);
-          throw new Error("Unexpected API response structure.");
-        }
-      }
-
-      // Display results
-      function displayResults(data) {
-        resultsContainer.innerHTML = "";
-        if (!data || data.length === 0) {
-          showError("Could not find any events in the provided input.");
-          downloadContainer.classList.add("hidden");
-          resultsContainer.classList.add("hidden");
-          return;
-        }
-
-        data.forEach((event, index) => {
-          const eventCard = `
-                    <div class="result-card p-5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white/60 dark:bg-gray-800/60" style="animation-delay: ${
-                      index * 100
-                    }ms">
-                        <h2 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">${
-                          event.summary
-                        }</h2>
-                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                           <div class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-green-500"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong>Start:</strong><span class="ml-2">${new Date(
-                             event.dtstart
-                           ).toLocaleString()} <span class="text-gray-500 dark:text-gray-400">(${
-            event.start_timezone
-          })</span></span></div>
-                           <div class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-red-500"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong>End:</strong><span class="ml-2">${new Date(
-                             event.dtend
-                           ).toLocaleString()} <span class="text-gray-500 dark:text-gray-400">(${
-            event.end_timezone
-          })</span></span></div>
-                           <div class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><strong>Location:</strong><span class="ml-2">${
-                             event.location
-                           }</span></div>
-                           <div class="pt-2 mt-2 border-t border-gray-200 dark:border-gray-700"><p class="whitespace-pre-wrap">${
-                             event.description
-                           }</p></div>
-                        </div>
-                    </div>
-                `;
-          resultsContainer.innerHTML += eventCard;
-        });
-
-        resultsContainer.classList.remove("hidden");
-        downloadContainer.classList.remove("hidden");
-      }
-
-      // Error handling
-      function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.classList.remove("hidden");
-      }
-
-      function hideError() {
-        errorMessage.classList.add("hidden");
-      }
-
-      function showApiError(message) {
-        apiErrorText.textContent = message;
-        apiErrorLog.classList.remove("hidden");
-      }
-
-      function hideApiError() {
-        apiErrorLog.classList.add("hidden");
-        apiErrorText.textContent = "";
-      }
-
-      // ICS Generation and Download
-      downloadBtn.addEventListener("click", () => {
-        if (!eventsData || eventsData.length === 0) return;
-        const icsContent = generateICS(eventsData);
-        downloadFile(icsContent, "itinerary.ics", "text/calendar");
-      });
-
-      function generateICS(events) {
-        const toICSDate = (dateString) =>
-          dateString ? dateString.replace(/[-:]/g, "") : "";
-        const escapeICS = (str) =>
-          str
-            ? str
-                .replace(/\\/g, "\\\\")
-                .replace(/;/g, "\\;")
-                .replace(/,/g, "\\,")
-                .replace(/\n/g, "\\n")
-            : "";
-        const dtstamp =
-          new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-
-        const eventStrings = events.map((data) => {
-          const uid = `${Date.now()}-${Math.random()}@itinerary-app.com`;
-          return [
-            "BEGIN:VEVENT",
-            `UID:${uid}`,
-            `DTSTAMP:${dtstamp}`,
-            `DTSTART;TZID=${data.start_timezone}:${toICSDate(data.dtstart)}`,
-            `DTEND;TZID=${data.end_timezone}:${toICSDate(data.dtend)}`,
-            `SUMMARY:${escapeICS(data.summary)}`,
-            `DESCRIPTION:${escapeICS(data.description)}`,
-            `LOCATION:${escapeICS(data.location)}`,
-            "END:VEVENT",
-          ].join("\r\n");
-        });
-
-        return [
-          "BEGIN:VCALENDAR",
-          "VERSION:2.0",
-          "PRODID:-//ICS-Gen//EN",
-          ...eventStrings,
-          "END:VCALENDAR",
-        ].join("\r\n");
-      }
-
-      function downloadFile(content, fileName, contentType) {
-        const a = document.createElement("a");
-        const file = new Blob([content], { type: contentType });
-        a.href = URL.createObjectURL(file);
-        a.download = fileName;
-        a.click();
-        URL.revokeObjectURL(a.href);
-      }
-    </script>
+    <script type="module" src="src/main.js"></script>
   </body>
 </html>

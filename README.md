@@ -38,6 +38,13 @@ To run ICS-Gen locally, follow these steps:
 2.  Open the `index.html` file in your web browser.
 3.  On the first launch, a modal will appear. Enter your OpenRouter API key to activate the application's features. The key will be saved in local storage for future sessions.
 
+## 🧪 Development (Bun)
+
+1.  Install dependencies: `bun install`
+2.  Run tests: `bun run test`
+3.  Serve locally: `bunx serve .`
+4.  Open the printed URL in your browser.
+
 ## penggunaan
 
 1.  **Paste Text or Upload Image:**
