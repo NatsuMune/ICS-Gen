@@ -88,8 +88,10 @@ export function createAppController({
     if (!value || typeof value !== "string") return "";
     let normalized = value.trim();
     if (!normalized) return "";
-    normalized = normalized.replace(/\s/g, "+");
+    normalized = normalized.replace(/[\r\n\t]/g, "");
+    normalized = normalized.replace(/ /g, "+");
     normalized = normalized.replace(/-/g, "+").replace(/_/g, "/");
+    normalized = normalized.replace(/[^A-Za-z0-9+/=]/g, "");
     const remainder = normalized.length % 4;
     if (remainder) {
       normalized = normalized.padEnd(normalized.length + (4 - remainder), "=");
@@ -196,6 +198,7 @@ export function createAppController({
   dom.resetBtn.addEventListener("click", resetForm);
 
   const parseItinerary = async () => {
+    const safeLocationHref = `${window.location.origin}${window.location.pathname}`;
     const providerName = settingsStore.getProvider();
     if (providerName === "openrouter") {
       const apiKey = settingsStore.getApiKey();
@@ -246,7 +249,7 @@ export function createAppController({
       eventsData = await itineraryService.parseItinerary({
         text: inputMode === INPUT_MODE_TEXT ? text : "",
         imageBase64: inputMode === INPUT_MODE_IMAGE ? imageBase64 : null,
-        locationHref: window.location.href,
+        locationHref: safeLocationHref,
       });
 
       const rendered = renderResults(
