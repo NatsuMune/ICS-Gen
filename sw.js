@@ -1,4 +1,4 @@
-const CACHE_NAME = "itinerary-assistant-v3";
+const CACHE_NAME = "itinerary-assistant-v4";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -18,8 +18,6 @@ const urlsToCache = [
   "/src/ui/render.js",
   "/src/ui/settingsModal.js",
   "/src/utils/download.js",
-  "https://cdn.tailwindcss.com",
-  "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
 ];
 
 self.addEventListener("install", (event) => {
