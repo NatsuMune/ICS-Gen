@@ -3,8 +3,8 @@
   "short_name": "ICS-Gen",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f0f2f5",
-  "theme_color": "#4facfe",
+  "background_color": "#fbf6ee",
+  "theme_color": "#fbf6ee",
   "description": "Instantly convert your travel plans into calendar events.",
   "icons": [
     {
@@ -14,4 +14,3 @@
     }
   ]
 }
-
