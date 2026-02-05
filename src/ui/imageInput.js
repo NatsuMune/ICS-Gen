@@ -9,6 +9,41 @@ export function createImageInputController({
 }) {
   let imageBase64 = null;
 
+  const guessMimeType = (base64) => {
+    if (!base64 || typeof base64 !== "string") return "image/png";
+    if (base64.startsWith("/9j/")) return "image/jpeg";
+    if (base64.startsWith("iVBOR")) return "image/png";
+    if (base64.startsWith("R0lG")) return "image/gif";
+    if (base64.startsWith("UklGR")) return "image/webp";
+    return "image/png";
+  };
+
+  const setImageFromBase64 = (value, name = "URL image") => {
+    if (!value || typeof value !== "string") return;
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    let base64 = trimmed;
+    let previewSrc = trimmed;
+
+    if (trimmed.startsWith("data:image/")) {
+      const splitIndex = trimmed.indexOf(",");
+      if (splitIndex !== -1) {
+        base64 = trimmed.slice(splitIndex + 1);
+        previewSrc = trimmed;
+      }
+    } else {
+      const mimeType = guessMimeType(trimmed);
+      previewSrc = `data:${mimeType};base64,${trimmed}`;
+    }
+
+    imageBase64 = base64;
+    imagePreview.src = previewSrc;
+    imageName.textContent = name;
+    uploadPrompt.classList.add("hidden");
+    imagePreviewContainer.classList.remove("hidden");
+  };
+
   const handleFile = (file) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -68,6 +103,7 @@ export function createImageInputController({
 
   return {
     getImageBase64: () => imageBase64,
+    setImageFromBase64,
     clearImage,
   };
 }

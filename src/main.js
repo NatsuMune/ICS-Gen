@@ -9,7 +9,8 @@ import { createAppController } from "./app/controller.js";
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").then(
+    const swUrl = new URL("../sw.js", import.meta.url);
+    navigator.serviceWorker.register(swUrl).then(
       (registration) => {
         console.log(
           "ServiceWorker registration successful with scope: ",

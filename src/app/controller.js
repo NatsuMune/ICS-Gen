@@ -84,6 +84,101 @@ export function createAppController({
     dom.generateBtn.classList.remove("btn-disabled");
   };
 
+  const normalizeBase64Payload = (value) => {
+    if (!value || typeof value !== "string") return "";
+    let normalized = value.trim();
+    if (!normalized) return "";
+    normalized = normalized.replace(/\s/g, "+");
+    normalized = normalized.replace(/-/g, "+").replace(/_/g, "/");
+    const remainder = normalized.length % 4;
+    if (remainder) {
+      normalized = normalized.padEnd(normalized.length + (4 - remainder), "=");
+    }
+    return normalized;
+  };
+
+  const normalizeImageValue = (value) => {
+    if (!value || typeof value !== "string") return "";
+    const trimmed = value.trim();
+    if (!trimmed) return "";
+    if (trimmed.startsWith("data:image/")) {
+      const splitIndex = trimmed.indexOf(",");
+      if (splitIndex === -1) return trimmed;
+      const header = trimmed.slice(0, splitIndex);
+      const payload = normalizeBase64Payload(trimmed.slice(splitIndex + 1));
+      return `${header},${payload}`;
+    }
+    return normalizeBase64Payload(trimmed);
+  };
+
+  const isLikelyImagePayload = (value) => {
+    if (!value || typeof value !== "string") return false;
+    const trimmed = value.trim();
+    if (!trimmed) return false;
+    if (trimmed.startsWith("data:image/")) return true;
+    const normalized = trimmed.replace(/\s/g, "");
+    if (normalized.length < 80) return false;
+    if (!/^[A-Za-z0-9+/=_-]+$/.test(normalized)) return false;
+    return true;
+  };
+
+  const getUrlSeedInput = () => {
+    const href = window.location.href;
+    const queryFromHref = href.includes("?")
+      ? href.split("?")[1].split("#")[0]
+      : "";
+    const searchParams = new URLSearchParams(
+      window.location.search || queryFromHref
+    );
+    let hashParams = null;
+    if (window.location.hash) {
+      const rawHash = window.location.hash.replace(/^#\/?/, "");
+      const hashQuery = rawHash.startsWith("?") ? rawHash.slice(1) : rawHash;
+      if (hashQuery) {
+        hashParams = new URLSearchParams(hashQuery);
+      }
+    }
+
+    const getParam = (name) => {
+      if (searchParams.has(name)) return searchParams.get(name) ?? "";
+      if (hashParams && hashParams.has(name)) return hashParams.get(name) ?? "";
+      return null;
+    };
+
+    const imageValue =
+      getParam("image") ||
+      getParam("imageBase64") ||
+      getParam("img");
+    if (imageValue) {
+      return {
+        mode: INPUT_MODE_IMAGE,
+        value: imageValue,
+        name: getParam("imageName") || "URL image",
+      };
+    }
+
+    const textValue = getParam("text");
+    if (textValue) {
+      return {
+        mode: INPUT_MODE_TEXT,
+        value: textValue,
+      };
+    }
+
+    const inputValue = getParam("input");
+    if (!inputValue) return null;
+
+    const inferredMode = isLikelyImagePayload(inputValue)
+      ? INPUT_MODE_IMAGE
+      : INPUT_MODE_TEXT;
+
+    return {
+      mode: inferredMode,
+      value: inputValue,
+      name: getParam("imageName") || "URL image",
+    };
+  };
+
   const tutorialDismissed =
     window.localStorage.getItem(TUTORIAL_DISMISSED_KEY) === "true";
   if (tutorialDismissed) {
@@ -100,7 +195,7 @@ export function createAppController({
 
   dom.resetBtn.addEventListener("click", resetForm);
 
-  dom.generateBtn.addEventListener("click", async () => {
+  const parseItinerary = async () => {
     const providerName = settingsStore.getProvider();
     if (providerName === "openrouter") {
       const apiKey = settingsStore.getApiKey();
@@ -181,7 +276,27 @@ export function createAppController({
     } finally {
       setLoading({ loader: dom.loader, generateBtn: dom.generateBtn }, false);
     }
-  });
+  };
+
+  dom.generateBtn.addEventListener("click", parseItinerary);
+
+  const urlSeed = getUrlSeedInput();
+  if (urlSeed?.value) {
+    if (urlSeed.mode === INPUT_MODE_TEXT) {
+      setInputMode(INPUT_MODE_TEXT);
+      dom.textInput.value = urlSeed.value;
+      imageInputController.clearImage();
+    } else {
+      setInputMode(INPUT_MODE_IMAGE);
+      dom.textInput.value = "";
+      const normalizedImage = normalizeImageValue(urlSeed.value);
+      imageInputController.setImageFromBase64(normalizedImage, urlSeed.name);
+    }
+
+    window.setTimeout(() => {
+      parseItinerary();
+    }, 0);
+  }
 
   dom.downloadBtn.addEventListener("click", () => {
     if (!eventsData || eventsData.length === 0) return;

@@ -42,8 +42,8 @@ To run ICS-Gen locally, follow these steps:
 
 1.  Install dependencies: `bun install`
 2.  Run tests: `bun run test`
-3.  Serve locally: `bunx serve .`
-4.  Open the printed URL in your browser.
+3.  Serve locally: `bun run serve`
+4.  Open `http://localhost:3000/` in your browser.
 
 ## penggunaan
 
