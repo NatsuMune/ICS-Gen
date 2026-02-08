@@ -8,7 +8,7 @@
   "description": "Instantly convert your travel plans into calendar events.",
   "icons": [
     {
-      "src": "icons/icon.png",
+      "src": "icons/icon-light.png",
       "sizes": "512x512",
       "type": "image/png"
     }

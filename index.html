@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,12 +14,33 @@
     <link rel="stylesheet" href="styles/app.css" />
     <link rel="manifest" href="manifest.json" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#fbf6ee" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0a0f0d" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="theme-color"
+      content="#fbf6ee"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0a0f0d"
+      media="(prefers-color-scheme: dark)"
+    />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="apple-touch-icon" href="icons/icon.png" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <link rel="apple-touch-icon" href="icons/icon-light.png" />
+    <link
+      rel="icon"
+      href="icons/icon-light.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="icons/icon-dark.png"
+      media="(prefers-color-scheme: dark)"
+    />
   </head>
   <body class="app-body">
     <div class="bg-orb orb-1" aria-hidden="true"></div>
@@ -144,8 +165,8 @@
       </header>
 
       <section class="workspace">
-          <div class="panel panel-editor">
-            <div class="panel-header">
+        <div class="panel panel-editor">
+          <div class="panel-header">
             <div class="panel-header-row">
               <div>
                 <h2>1. Add your itinerary</h2>
@@ -170,10 +191,12 @@
                 </button>
               </div>
             </div>
-            </div>
+          </div>
 
           <div id="text-input-panel" class="input-panel">
-            <label for="text-input" class="field-label">Paste Itinerary Text</label>
+            <label for="text-input" class="field-label"
+              >Paste Itinerary Text</label
+            >
             <textarea
               id="text-input"
               rows="6"
@@ -183,7 +206,9 @@
           </div>
 
           <div id="image-input-panel" class="input-panel hidden">
-            <label for="image-upload-input" class="field-label">Upload an Image</label>
+            <label for="image-upload-input" class="field-label"
+              >Upload an Image</label
+            >
             <div id="drop-zone" class="drop-zone">
               <div id="upload-prompt" class="upload-prompt">
                 <svg
@@ -340,10 +365,7 @@
             <label for="settings-provider-select" class="field-label"
               >AI Provider</label
             >
-            <select
-              id="settings-provider-select"
-              class="field field-select"
-            >
+            <select id="settings-provider-select" class="field field-select">
               <option value="openrouter">OpenRouter</option>
               <option value="openai-compatible">OpenAI-Compatible</option>
             </select>
@@ -353,9 +375,7 @@
           </div>
           <div id="provider-config-fields" class="field-group hidden">
             <div class="field-group">
-              <label
-                for="settings-provider-endpoint-input"
-                class="field-label"
+              <label for="settings-provider-endpoint-input" class="field-label"
                 >Provider Endpoint</label
               >
               <input
@@ -366,9 +386,7 @@
               />
             </div>
             <div class="field-group">
-              <label
-                for="settings-provider-api-key-input"
-                class="field-label"
+              <label for="settings-provider-api-key-input" class="field-label"
                 >Provider API Key</label
               >
               <input
@@ -379,9 +397,7 @@
               />
             </div>
             <div class="field-group">
-              <label
-                for="settings-provider-model-input"
-                class="field-label"
+              <label for="settings-provider-model-input" class="field-label"
                 >Provider Model</label
               >
               <input
