@@ -99,29 +99,64 @@ export function createAppController({
     return normalized;
   };
 
-  const normalizeImageValue = (value) => {
+  const decodeBase64ToText = (value) => {
     if (!value || typeof value !== "string") return "";
-    const trimmed = value.trim();
-    if (!trimmed) return "";
-    if (trimmed.startsWith("data:image/")) {
-      const splitIndex = trimmed.indexOf(",");
-      if (splitIndex === -1) return trimmed;
-      const header = trimmed.slice(0, splitIndex);
-      const payload = normalizeBase64Payload(trimmed.slice(splitIndex + 1));
-      return `${header},${payload}`;
-    }
-    return normalizeBase64Payload(trimmed);
-  };
+    let input = value.trim();
+    if (!input) return "";
 
-  const isLikelyImagePayload = (value) => {
-    if (!value || typeof value !== "string") return false;
-    const trimmed = value.trim();
-    if (!trimmed) return false;
-    if (trimmed.startsWith("data:image/")) return true;
-    const normalized = trimmed.replace(/\s/g, "");
-    if (normalized.length < 80) return false;
-    if (!/^[A-Za-z0-9+/=_-]+$/.test(normalized)) return false;
-    return true;
+    if (input.startsWith("data:")) {
+      const splitIndex = input.indexOf(",");
+      if (splitIndex !== -1) {
+        input = input.slice(splitIndex + 1);
+      }
+    }
+
+    const decodePercent = (text) => {
+      try {
+        return decodeURIComponent(text);
+      } catch (error) {
+        return text;
+      }
+    };
+
+    input = decodePercent(input);
+    if (input.includes("%")) {
+      input = decodePercent(input);
+    }
+
+    const tryDecode = (payload) => {
+      const normalized = normalizeBase64Payload(payload);
+      if (!normalized) return "";
+      const binary = window.atob(normalized);
+      const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+      return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+    };
+
+    try {
+      let decoded = tryDecode(input);
+      if (!decoded) return "";
+
+      const looksLikeBase64 = (text) => {
+        const compact = text.replace(/\s/g, "");
+        return (
+          compact.length >= 32 &&
+          compact.length % 4 === 0 &&
+          /^[A-Za-z0-9+/=]+$/.test(compact)
+        );
+      };
+
+      if (looksLikeBase64(decoded)) {
+        const secondPass = tryDecode(decoded);
+        if (secondPass) {
+          decoded = secondPass;
+        }
+      }
+
+      return decoded.trim() ? decoded : "";
+    } catch (error) {
+      console.error("Failed to decode base64 input:", error);
+      return "";
+    }
   };
 
   const getUrlSeedInput = () => {
@@ -147,37 +182,18 @@ export function createAppController({
       return null;
     };
 
-    const imageValue =
-      getParam("image") ||
-      getParam("imageBase64") ||
-      getParam("img");
-    if (imageValue) {
-      return {
-        mode: INPUT_MODE_IMAGE,
-        value: imageValue,
-        name: getParam("imageName") || "URL image",
-      };
-    }
-
-    const textValue = getParam("text");
-    if (textValue) {
-      return {
-        mode: INPUT_MODE_TEXT,
-        value: textValue,
-      };
-    }
-
     const inputValue = getParam("input");
     if (!inputValue) return null;
-
-    const inferredMode = isLikelyImagePayload(inputValue)
-      ? INPUT_MODE_IMAGE
-      : INPUT_MODE_TEXT;
-
+    const decoded = decodeBase64ToText(inputValue);
+    if (!decoded) {
+      return {
+        error:
+          "Could not decode input. Ensure the input parameter is base64-encoded text.",
+      };
+    }
     return {
-      mode: inferredMode,
-      value: inputValue,
-      name: getParam("imageName") || "URL image",
+      mode: INPUT_MODE_TEXT,
+      value: decoded,
     };
   };
 
@@ -284,17 +300,12 @@ export function createAppController({
   dom.generateBtn.addEventListener("click", parseItinerary);
 
   const urlSeed = getUrlSeedInput();
-  if (urlSeed?.value) {
-    if (urlSeed.mode === INPUT_MODE_TEXT) {
-      setInputMode(INPUT_MODE_TEXT);
-      dom.textInput.value = urlSeed.value;
-      imageInputController.clearImage();
-    } else {
-      setInputMode(INPUT_MODE_IMAGE);
-      dom.textInput.value = "";
-      const normalizedImage = normalizeImageValue(urlSeed.value);
-      imageInputController.setImageFromBase64(normalizedImage, urlSeed.name);
-    }
+  if (urlSeed?.error) {
+    showError(dom.errorMessage, urlSeed.error);
+  } else if (urlSeed?.value) {
+    setInputMode(INPUT_MODE_TEXT);
+    dom.textInput.value = urlSeed.value;
+    imageInputController.clearImage();
 
     window.setTimeout(() => {
       parseItinerary();

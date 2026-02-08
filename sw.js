@@ -1,4 +1,4 @@
-const CACHE_NAME = "itinerary-assistant-v7";
+const CACHE_NAME = "itinerary-assistant-v10";
 const urlsToCache = [
   "./",
   "./index.html",
