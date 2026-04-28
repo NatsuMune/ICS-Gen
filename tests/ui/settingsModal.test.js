@@ -77,7 +77,7 @@ describe("settingsModal", () => {
     document.getElementById("save-settings-btn").click();
 
     expect(store.getProvider()).toBe("openai-compatible");
-    expect(store.getCustomEndpoint()).toBe("https://api.example.com");
+    expect(store.getCustomBaseUrl()).toBe("https://api.example.com");
     expect(store.getCustomApiKey()).toBe("sk-test");
     expect(store.getCustomModel()).toBe("test-model");
   });

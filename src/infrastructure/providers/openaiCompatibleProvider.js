@@ -1,6 +1,16 @@
 import { buildItineraryPrompt } from "../../domain/itineraryPrompt.js";
 import { parseModelJson } from "../../utils/parseModelJson.js";
 
+const CHAT_COMPLETIONS_PATH = "/chat/completions";
+
+export function buildChatCompletionsUrl(baseUrl) {
+  const normalizedBaseUrl = baseUrl.trim().replace(/\/+$/, "");
+  if (normalizedBaseUrl.endsWith(CHAT_COMPLETIONS_PATH)) {
+    return normalizedBaseUrl;
+  }
+  return `${normalizedBaseUrl}${CHAT_COMPLETIONS_PATH}`;
+}
+
 export function createOpenAICompatibleProvider({
   fetchImpl = window.fetch.bind(window),
   settingsStore,
@@ -15,10 +25,10 @@ export function createOpenAICompatibleProvider({
   async function parseItinerary({ text, imageBase64, locationHref }) {
     const apiKey = settingsStore.getCustomApiKey();
     const model = settingsStore.getCustomModel();
-    const endpoint = settingsStore.getCustomEndpoint();
+    const baseUrl = settingsStore.getCustomBaseUrl();
 
-    if (!endpoint) {
-      throw new Error("Provider endpoint is not configured.");
+    if (!baseUrl) {
+      throw new Error("Provider base URL is not configured.");
     }
 
     if (!apiKey) {
@@ -52,7 +62,7 @@ export function createOpenAICompatibleProvider({
       response_format: { type: "json_object" },
     };
 
-    const response = await fetchImpl(endpoint, {
+    const response = await fetchImpl(buildChatCompletionsUrl(baseUrl), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

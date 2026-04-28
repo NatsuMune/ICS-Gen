@@ -30,7 +30,7 @@ export function setupSettingsModal({
     settingsProviderSelect.value = settingsStore.getProvider();
     settingsApiKeyInput.value = settingsStore.getApiKey();
     settingsModelInput.value = settingsStore.getModel();
-    settingsProviderEndpointInput.value = settingsStore.getCustomEndpoint();
+    settingsProviderEndpointInput.value = settingsStore.getCustomBaseUrl();
     settingsProviderApiKeyInput.value = settingsStore.getCustomApiKey();
     settingsProviderModelInput.value = settingsStore.getCustomModel();
     toggleProviderFields();
@@ -60,7 +60,7 @@ export function setupSettingsModal({
   saveSettingsBtn.addEventListener("click", () => {
     const apiKey = settingsApiKeyInput.value.trim();
     const model = settingsModelInput.value.trim();
-    const providerEndpoint = settingsProviderEndpointInput.value.trim();
+    const providerBaseUrl = settingsProviderEndpointInput.value.trim();
     const providerApiKey = settingsProviderApiKeyInput.value.trim();
     const providerModel = settingsProviderModelInput.value.trim();
 
@@ -80,10 +80,10 @@ export function setupSettingsModal({
       settingsStore.setProvider(settingsProviderSelect.value);
     }
 
-    if (providerEndpoint) {
-      settingsStore.setCustomEndpoint(providerEndpoint);
+    if (providerBaseUrl) {
+      settingsStore.setCustomBaseUrl(providerBaseUrl);
     } else {
-      settingsStore.clearCustomEndpoint();
+      settingsStore.clearCustomBaseUrl();
     }
 
     if (providerApiKey) {

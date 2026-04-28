@@ -225,9 +225,9 @@ export function createAppController({
       }
     } else {
       const providerKey = settingsStore.getCustomApiKey();
-      const providerEndpoint = settingsStore.getCustomEndpoint();
+      const providerBaseUrl = settingsStore.getCustomBaseUrl();
       const providerModel = settingsStore.getCustomModel();
-      if (!providerKey || !providerEndpoint || !providerModel) {
+      if (!providerKey || !providerBaseUrl || !providerModel) {
         showError(
           dom.errorMessage,
           "Please configure your provider settings first."

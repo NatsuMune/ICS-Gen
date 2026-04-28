@@ -7,10 +7,10 @@ ICS-Gen is a smart, intuitive web application that parses travel itineraries—w
 ## ✨ Key Features
 
 - **Dual Input Modes:** Paste raw text or upload an image (e.g., a screenshot of a booking confirmation).
-- **Intelligent Parsing:** Uses the Gemini AI model to accurately identify event details like summaries, dates, times, locations, and timezones.
+- **Intelligent Parsing:** Uses a configured AI provider to identify event details like summaries, dates, times, locations, and timezones.
 - **.ics File Generation:** Creates a universally compatible `.ics` file that can be imported into Google Calendar, Apple Calendar, Outlook, and other calendar applications.
 - **Progressive Web App (PWA):** Installable on both desktop and mobile devices for a native app-like experience and offline access.
-- **Secure API Key Storage:** Prompts for your OpenRouter API key on first use and stores it securely in your browser's local storage.
+- **Secure Provider Storage:** Stores provider, API key, model, and OpenAI-compatible base URL settings in your browser's local storage.
 - **Modern, Responsive UI:** A clean, glassmorphism-inspired design that looks great on any device.
 
 ## 🚀 How It Works
@@ -30,13 +30,15 @@ To run ICS-Gen locally, follow these steps:
 **Prerequisites:**
 
 - A modern web browser (Chrome, Firefox, Safari, Edge).
-- An API key from [OpenRouter](https://openrouter.ai/ "null").
+- An API key from [OpenRouter](https://openrouter.ai/ "null") or another OpenAI-compatible provider.
 
 **Setup:**
 
 1.  Clone this repository or download the source files.
 2.  Open the `index.html` file in your web browser.
 3.  On the first launch, a modal will appear. Enter your OpenRouter API key to activate the application's features. The key will be saved in local storage for future sessions.
+
+To use an OpenAI-compatible provider, open settings, select **OpenAI-Compatible**, and enter the provider base URL, API key, and model. Use the base URL only, such as `https://api.example.com/v1`; ICS-Gen appends `/chat/completions` when it sends requests.
 
 ## 🧪 Development (Bun)
 

@@ -3,7 +3,7 @@ const MODEL_STORAGE_KEY = "openrouter_model";
 const PROVIDER_STORAGE_KEY = "ai_provider";
 const CUSTOM_API_KEY_STORAGE_KEY = "provider_api_key";
 const CUSTOM_MODEL_STORAGE_KEY = "provider_model";
-const CUSTOM_ENDPOINT_STORAGE_KEY = "provider_endpoint";
+const CUSTOM_BASE_URL_STORAGE_KEY = "provider_endpoint";
 const DEFAULT_MODEL = "nvidia/nemotron-nano-12b-v2-vl:free";
 const DEFAULT_PROVIDER = "openrouter";
 
@@ -29,12 +29,12 @@ export function createSettingsStore(storage = window.localStorage) {
     storage.setItem(CUSTOM_MODEL_STORAGE_KEY, model);
   const clearCustomModel = () => storage.removeItem(CUSTOM_MODEL_STORAGE_KEY);
 
-  const getCustomEndpoint = () =>
-    storage.getItem(CUSTOM_ENDPOINT_STORAGE_KEY) || "";
-  const setCustomEndpoint = (endpoint) =>
-    storage.setItem(CUSTOM_ENDPOINT_STORAGE_KEY, endpoint);
-  const clearCustomEndpoint = () =>
-    storage.removeItem(CUSTOM_ENDPOINT_STORAGE_KEY);
+  const getCustomBaseUrl = () =>
+    storage.getItem(CUSTOM_BASE_URL_STORAGE_KEY) || "";
+  const setCustomBaseUrl = (baseUrl) =>
+    storage.setItem(CUSTOM_BASE_URL_STORAGE_KEY, baseUrl);
+  const clearCustomBaseUrl = () =>
+    storage.removeItem(CUSTOM_BASE_URL_STORAGE_KEY);
 
   return {
     getApiKey,
@@ -51,9 +51,12 @@ export function createSettingsStore(storage = window.localStorage) {
     getCustomModel,
     setCustomModel,
     clearCustomModel,
-    getCustomEndpoint,
-    setCustomEndpoint,
-    clearCustomEndpoint,
+    getCustomBaseUrl,
+    setCustomBaseUrl,
+    clearCustomBaseUrl,
+    getCustomEndpoint: getCustomBaseUrl,
+    setCustomEndpoint: setCustomBaseUrl,
+    clearCustomEndpoint: clearCustomBaseUrl,
     defaults: {
       model: DEFAULT_MODEL,
       provider: DEFAULT_PROVIDER,

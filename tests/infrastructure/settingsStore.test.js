@@ -17,14 +17,12 @@ describe("settingsStore", () => {
     const store = createSettingsStore(storage);
 
     store.setProvider("openai-compatible");
-    store.setCustomEndpoint("https://api.example.com/v1/chat/completions");
+    store.setCustomBaseUrl("https://api.example.com/v1");
     store.setCustomApiKey("sk-test");
     store.setCustomModel("test-model");
 
     expect(store.getProvider()).toBe("openai-compatible");
-    expect(store.getCustomEndpoint()).toBe(
-      "https://api.example.com/v1/chat/completions"
-    );
+    expect(store.getCustomBaseUrl()).toBe("https://api.example.com/v1");
     expect(store.getCustomApiKey()).toBe("sk-test");
     expect(store.getCustomModel()).toBe("test-model");
   });
