@@ -890,17 +890,43 @@ body.app-body {
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1180px) {
   body.app-body {
-    padding: calc(24px + env(safe-area-inset-top))
+    --responsive-top-clearance: max(56px, calc(24px + env(safe-area-inset-top)));
+    --utility-button-inset-right: max(32px, calc(24px + env(safe-area-inset-right)));
+    padding: var(--responsive-top-clearance)
       calc(24px + env(safe-area-inset-right))
       calc(24px + env(safe-area-inset-bottom))
       calc(24px + env(safe-area-inset-left));
   }
 
   .app-shell {
+    margin-top: 104px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .hero,
+  .workspace,
+  .panel {
+    min-width: 0;
+  }
+
+  .utility-buttons {
+    position: fixed;
+    top: var(--responsive-top-clearance);
+    right: var(--utility-button-inset-right);
+  }
+
+  .utility-buttons .icon-button {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 980px) {
+  .app-shell {
     grid-template-columns: 1fr;
-    margin-top: 72px;
   }
 
   .hero::after {
@@ -910,7 +936,8 @@ body.app-body {
 
 @media (max-width: 640px) {
   body.app-body {
-    padding: calc(18px + env(safe-area-inset-top))
+    --responsive-top-clearance: max(56px, calc(18px + env(safe-area-inset-top)));
+    padding: var(--responsive-top-clearance)
       calc(18px + env(safe-area-inset-right))
       calc(18px + env(safe-area-inset-bottom))
       calc(18px + env(safe-area-inset-left));
@@ -925,7 +952,7 @@ body.app-body {
   }
 
   .app-shell {
-    margin-top: 64px;
+    margin-top: 104px;
   }
 
   .action-row {
@@ -935,16 +962,6 @@ body.app-body {
   .btn {
     width: 100%;
     justify-content: center;
-  }
-
-  .utility-buttons {
-    top: calc(24px + env(safe-area-inset-top));
-    right: calc(24px + env(safe-area-inset-right));
-  }
-
-  .utility-buttons .icon-button {
-    width: 48px;
-    height: 48px;
   }
 
 }
