@@ -938,8 +938,13 @@ body.app-body {
   }
 
   .utility-buttons {
-    top: 16px;
-    right: 16px;
+    top: calc(24px + env(safe-area-inset-top));
+    right: calc(24px + env(safe-area-inset-right));
+  }
+
+  .utility-buttons .icon-button {
+    width: 48px;
+    height: 48px;
   }
 
 }
