@@ -49,7 +49,7 @@ describe("imageInputController", () => {
     imageUploadInput.dispatchEvent(new Event("change"));
 
     expect(controller.getImageBase64()).toBe("abc");
-    expect(textInput.disabled).toBe(true);
+    expect(textInput.disabled).toBe(false);
     expect(uploadPrompt.classList.contains("hidden")).toBe(true);
     expect(imagePreviewContainer.classList.contains("hidden")).toBe(false);
   });

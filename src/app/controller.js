@@ -223,11 +223,21 @@ export function createAppController({
         apiKeyModal.classList.remove("hidden");
         return;
       }
+    } else if (providerName === "anthropic") {
+      const providerKey = settingsStore.getCustomApiKey();
+      const providerModel = settingsStore.getCustomModel();
+      if (!providerKey || !providerModel) {
+        showError(
+          dom.errorMessage,
+          "Please configure your Anthropic settings first."
+        );
+        settingsModal.classList.remove("hidden");
+        return;
+      }
     } else {
       const providerKey = settingsStore.getCustomApiKey();
-      const providerBaseUrl = settingsStore.getCustomBaseUrl();
       const providerModel = settingsStore.getCustomModel();
-      if (!providerKey || !providerBaseUrl || !providerModel) {
+      if (!providerKey || !providerModel) {
         showError(
           dom.errorMessage,
           "Please configure your provider settings first."
@@ -283,7 +293,11 @@ export function createAppController({
       console.error("API call failed:", error);
       if (error.message.includes("Authentication failed")) {
         showError(dom.errorMessage, error.message);
-        apiKeyModal.classList.remove("hidden");
+        if (providerName === "openrouter") {
+          apiKeyModal.classList.remove("hidden");
+        } else {
+          settingsModal.classList.remove("hidden");
+        }
       } else if (error.message.includes("Model returned")) {
         showError(dom.errorMessage, error.message);
       } else {

@@ -372,15 +372,16 @@
             <select id="settings-provider-select" class="field field-select">
               <option value="openrouter">OpenRouter</option>
               <option value="openai-compatible">OpenAI-Compatible</option>
+              <option value="anthropic">Anthropic</option>
             </select>
             <p class="field-hint">
-              Currently supported: OpenRouter, OpenAI-Compatible
+              Currently supported: OpenRouter, OpenAI-Compatible, Anthropic
             </p>
           </div>
           <div id="provider-config-fields" class="field-group hidden">
-            <div class="field-group">
+            <div id="provider-endpoint-group" class="field-group">
               <label for="settings-provider-endpoint-input" class="field-label"
-                >Provider Base URL</label
+                >Provider Base URL (optional)</label
               >
               <input
                 type="text"

@@ -15,6 +15,9 @@ function createSettingsStoreStub(overrides = {}) {
 
 describe("openaiCompatibleProvider", () => {
   it("builds chat completions URLs from provider base URLs", () => {
+    expect(buildChatCompletionsUrl("")).toBe(
+      "https://api.openai.com/v1/chat/completions"
+    );
     expect(buildChatCompletionsUrl("https://api.example.com/v1")).toBe(
       "https://api.example.com/v1/chat/completions"
     );
@@ -26,18 +29,7 @@ describe("openaiCompatibleProvider", () => {
     ).toBe("https://api.example.com/v1/chat/completions");
   });
 
-  it("throws when base URL is missing", async () => {
-    const provider = createOpenAICompatibleProvider({
-      fetchImpl: vi.fn(),
-      settingsStore: createSettingsStoreStub({ getCustomBaseUrl: () => "" }),
-    });
-
-    await expect(provider.parseItinerary({ text: "hi" })).rejects.toThrow(
-      "Provider base URL is not configured"
-    );
-  });
-
-  it("parses events from response", async () => {
+  it("defaults to the OpenAI API base URL when no base URL is configured", async () => {
     const fetchImpl = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -53,7 +45,7 @@ describe("openaiCompatibleProvider", () => {
 
     const provider = createOpenAICompatibleProvider({
       fetchImpl,
-      settingsStore: createSettingsStoreStub(),
+      settingsStore: createSettingsStoreStub({ getCustomBaseUrl: () => "" }),
       nowProvider: () => "now",
     });
 
@@ -61,7 +53,7 @@ describe("openaiCompatibleProvider", () => {
 
     expect(events).toEqual([{ summary: "Trip" }]);
     expect(fetchImpl).toHaveBeenCalledWith(
-      "https://api.example.com/v1/chat/completions",
+      "https://api.openai.com/v1/chat/completions",
       expect.any(Object)
     );
   });

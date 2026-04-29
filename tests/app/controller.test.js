@@ -5,6 +5,14 @@ import { createMemoryStorage } from "../helpers/storage.js";
 
 function setupDom() {
   document.body.innerHTML = `
+    <div class="app-shell"></div>
+    <section id="tutorial-hero"></section>
+    <button id="help-btn"></button>
+    <button id="dismiss-hero-btn"></button>
+    <button id="mode-text-btn"></button>
+    <button id="mode-image-btn"></button>
+    <div id="text-input-panel"></div>
+    <div id="image-input-panel"></div>
     <textarea id="text-input"></textarea>
     <input id="image-upload-input" />
     <button id="generate-btn"></button>
@@ -41,6 +49,14 @@ function setupDom() {
   `;
 
   return {
+    appShell: document.querySelector(".app-shell"),
+    hero: document.getElementById("tutorial-hero"),
+    helpBtn: document.getElementById("help-btn"),
+    dismissHeroBtn: document.getElementById("dismiss-hero-btn"),
+    modeTextBtn: document.getElementById("mode-text-btn"),
+    modeImageBtn: document.getElementById("mode-image-btn"),
+    textInputPanel: document.getElementById("text-input-panel"),
+    imageInputPanel: document.getElementById("image-input-panel"),
     textInput: document.getElementById("text-input"),
     imageUploadInput: document.getElementById("image-upload-input"),
     generateBtn: document.getElementById("generate-btn"),

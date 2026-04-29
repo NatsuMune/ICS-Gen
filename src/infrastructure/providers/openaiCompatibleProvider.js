@@ -2,9 +2,14 @@ import { buildItineraryPrompt } from "../../domain/itineraryPrompt.js";
 import { parseModelJson } from "../../utils/parseModelJson.js";
 
 const CHAT_COMPLETIONS_PATH = "/chat/completions";
+const DEFAULT_OPENAI_COMPATIBLE_BASE_URL = "https://api.openai.com/v1";
 
-export function buildChatCompletionsUrl(baseUrl) {
-  const normalizedBaseUrl = baseUrl.trim().replace(/\/+$/, "");
+export function buildChatCompletionsUrl(
+  baseUrl = DEFAULT_OPENAI_COMPATIBLE_BASE_URL
+) {
+  const normalizedBaseUrl = (baseUrl || DEFAULT_OPENAI_COMPATIBLE_BASE_URL)
+    .trim()
+    .replace(/\/+$/, "");
   if (normalizedBaseUrl.endsWith(CHAT_COMPLETIONS_PATH)) {
     return normalizedBaseUrl;
   }
@@ -26,10 +31,6 @@ export function createOpenAICompatibleProvider({
     const apiKey = settingsStore.getCustomApiKey();
     const model = settingsStore.getCustomModel();
     const baseUrl = settingsStore.getCustomBaseUrl();
-
-    if (!baseUrl) {
-      throw new Error("Provider base URL is not configured.");
-    }
 
     if (!apiKey) {
       throw new Error("Provider API key is not configured.");

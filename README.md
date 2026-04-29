@@ -18,7 +18,7 @@ ICS-Gen is a smart, intuitive web application that parses travel itineraries—w
 ICS-Gen streamlines the process of calendar creation into three simple steps:
 
 1.  **Input:** The user provides an itinerary by pasting text or uploading an image.
-2.  **Process:** The app sends the input to the Gemini API with a specialized prompt designed to extract event information into a structured JSON format.
+2.  **Process:** The app sends the input to your configured AI provider with a specialized prompt designed to extract event information into a structured JSON format.
 3.  **Output:** The extracted events are displayed for review and can be downloaded as a single `.ics` file, ready for import.
 
 The front-end is built with **HTML**, **Tailwind CSS**, and vanilla **JavaScript**, ensuring it is lightweight and fast.
@@ -30,7 +30,7 @@ To run ICS-Gen locally, follow these steps:
 **Prerequisites:**
 
 - A modern web browser (Chrome, Firefox, Safari, Edge).
-- An API key from [OpenRouter](https://openrouter.ai/ "null") or another OpenAI-compatible provider.
+- An API key from [OpenRouter](https://openrouter.ai/ "null"), Anthropic, or another OpenAI-compatible provider.
 
 **Setup:**
 
@@ -38,7 +38,9 @@ To run ICS-Gen locally, follow these steps:
 2.  Open the `index.html` file in your web browser.
 3.  On the first launch, a modal will appear. Enter your OpenRouter API key to activate the application's features. The key will be saved in local storage for future sessions.
 
-To use an OpenAI-compatible provider, open settings, select **OpenAI-Compatible**, and enter the provider base URL, API key, and model. Use the base URL only, such as `https://api.example.com/v1`; ICS-Gen appends `/chat/completions` when it sends requests.
+To use an OpenAI-compatible provider, open settings, select **OpenAI-Compatible**, and enter the API key and model. The base URL is optional and defaults to `https://api.openai.com/v1`; if you enter a custom base URL such as `https://api.example.com/v1`, ICS-Gen appends `/chat/completions` when it sends requests.
+
+To use Anthropic directly, open settings, select **Anthropic**, and enter your Anthropic API key and model name. The base URL is optional and defaults to `https://api.anthropic.com/v1`; if you enter a custom base URL, ICS-Gen appends `/messages` when it sends requests.
 
 ## 🧪 Development (Bun)
 

@@ -18,11 +18,13 @@ describe("settingsStore", () => {
 
     store.setProvider("openai-compatible");
     store.setCustomBaseUrl("https://api.example.com/v1");
+    store.setAnthropicBaseUrl("https://api.anthropic.example/v1");
     store.setCustomApiKey("sk-test");
     store.setCustomModel("test-model");
 
     expect(store.getProvider()).toBe("openai-compatible");
     expect(store.getCustomBaseUrl()).toBe("https://api.example.com/v1");
+    expect(store.getAnthropicBaseUrl()).toBe("https://api.anthropic.example/v1");
     expect(store.getCustomApiKey()).toBe("sk-test");
     expect(store.getCustomModel()).toBe("test-model");
   });

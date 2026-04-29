@@ -12,9 +12,13 @@ describe("settingsModal", () => {
       <select id="settings-provider-select">
         <option value="openrouter">OpenRouter</option>
         <option value="openai-compatible">OpenAI-Compatible</option>
+        <option value="anthropic">Anthropic</option>
       </select>
       <div id="provider-config-fields" class="hidden"></div>
+      <div id="provider-endpoint-group"></div>
       <div id="openrouter-config-fields"></div>
+      <label for="settings-provider-api-key-input">Provider API Key</label>
+      <label for="settings-provider-model-input">Provider Model</label>
       <input id="settings-provider-endpoint-input" />
       <input id="settings-provider-api-key-input" />
       <input id="settings-provider-model-input" />
@@ -32,6 +36,9 @@ describe("settingsModal", () => {
     );
     const providerConfigFields = document.getElementById(
       "provider-config-fields"
+    );
+    const providerEndpointGroup = document.getElementById(
+      "provider-endpoint-group"
     );
     const openrouterConfigFields = document.getElementById(
       "openrouter-config-fields"
@@ -52,6 +59,7 @@ describe("settingsModal", () => {
       closeSettingsBtn: document.getElementById("close-settings-btn"),
       settingsProviderSelect,
       providerConfigFields,
+      providerEndpointGroup,
       openrouterConfigFields,
       settingsProviderEndpointInput,
       settingsProviderApiKeyInput,
@@ -80,5 +88,92 @@ describe("settingsModal", () => {
     expect(store.getCustomBaseUrl()).toBe("https://api.example.com");
     expect(store.getCustomApiKey()).toBe("sk-test");
     expect(store.getCustomModel()).toBe("test-model");
+  });
+
+  it("shows Anthropic fields with an optional separate base URL", () => {
+    document.body.innerHTML = `
+      <button id="settings-btn"></button>
+      <div id="settings-modal" class="hidden"></div>
+      <button id="close-settings-btn"></button>
+      <select id="settings-provider-select">
+        <option value="openrouter">OpenRouter</option>
+        <option value="openai-compatible">OpenAI-Compatible</option>
+        <option value="anthropic">Anthropic</option>
+      </select>
+      <div id="provider-config-fields" class="hidden"></div>
+      <div id="provider-endpoint-group"></div>
+      <div id="openrouter-config-fields"></div>
+      <label for="settings-provider-api-key-input">Provider API Key</label>
+      <label for="settings-provider-model-input">Provider Model</label>
+      <input id="settings-provider-endpoint-input" />
+      <input id="settings-provider-api-key-input" />
+      <input id="settings-provider-model-input" />
+      <input id="settings-api-key-input" />
+      <input id="settings-model-input" />
+      <button id="save-settings-btn"></button>
+      <button id="cancel-settings-btn"></button>
+      <div id="settings-api-key-error" class="hidden"></div>
+    `;
+
+    const store = createSettingsStore(createMemoryStorage());
+    const settingsProviderSelect = document.getElementById(
+      "settings-provider-select"
+    );
+    const providerEndpointGroup = document.getElementById(
+      "provider-endpoint-group"
+    );
+    const providerConfigFields = document.getElementById(
+      "provider-config-fields"
+    );
+    const settingsProviderEndpointInput = document.getElementById(
+      "settings-provider-endpoint-input"
+    );
+    const settingsProviderApiKeyInput = document.getElementById(
+      "settings-provider-api-key-input"
+    );
+    const settingsProviderModelInput = document.getElementById(
+      "settings-provider-model-input"
+    );
+
+    setupSettingsModal({
+      settingsBtn: document.getElementById("settings-btn"),
+      settingsModal: document.getElementById("settings-modal"),
+      closeSettingsBtn: document.getElementById("close-settings-btn"),
+      settingsProviderSelect,
+      providerConfigFields,
+      providerEndpointGroup,
+      openrouterConfigFields: document.getElementById("openrouter-config-fields"),
+      settingsProviderEndpointInput,
+      settingsProviderApiKeyInput,
+      settingsProviderModelInput,
+      settingsApiKeyInput: document.getElementById("settings-api-key-input"),
+      settingsModelInput: document.getElementById("settings-model-input"),
+      saveSettingsBtn: document.getElementById("save-settings-btn"),
+      cancelSettingsBtn: document.getElementById("cancel-settings-btn"),
+      settingsApiKeyError: document.getElementById("settings-api-key-error"),
+      settingsStore: store,
+    });
+
+    settingsProviderSelect.value = "anthropic";
+    settingsProviderSelect.dispatchEvent(new Event("change"));
+
+    expect(providerConfigFields.classList.contains("hidden")).toBe(false);
+    expect(providerEndpointGroup.classList.contains("hidden")).toBe(false);
+    expect(settingsProviderEndpointInput.placeholder).toBe(
+      "https://api.anthropic.com/v1"
+    );
+    expect(settingsProviderApiKeyInput.placeholder).toBe("sk-ant-...");
+    expect(settingsProviderModelInput.placeholder).toBe("claude-sonnet-4-5");
+
+    settingsProviderEndpointInput.value = "https://anthropic.example.com/v1";
+    settingsProviderApiKeyInput.value = "sk-ant-test";
+    settingsProviderModelInput.value = "claude-test";
+    document.getElementById("save-settings-btn").click();
+
+    expect(store.getProvider()).toBe("anthropic");
+    expect(store.getCustomBaseUrl()).toBe("");
+    expect(store.getAnthropicBaseUrl()).toBe("https://anthropic.example.com/v1");
+    expect(store.getCustomApiKey()).toBe("sk-ant-test");
+    expect(store.getCustomModel()).toBe("claude-test");
   });
 });

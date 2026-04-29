@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "bun@1.2.19",
   "scripts": {
-    "serve": "bunx serve . --port 3000 --no-clean-urls",
+    "serve": "bunx serve . -l 3000",
     "test": "vitest run"
   },
   "devDependencies": {

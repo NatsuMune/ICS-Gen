@@ -32,6 +32,7 @@ export function getDom() {
     closeSettingsBtn: document.getElementById("close-settings-btn"),
     settingsProviderSelect: document.getElementById("settings-provider-select"),
     providerConfigFields: document.getElementById("provider-config-fields"),
+    providerEndpointGroup: document.getElementById("provider-endpoint-group"),
     openrouterConfigFields: document.getElementById("openrouter-config-fields"),
     settingsProviderEndpointInput: document.getElementById(
       "settings-provider-endpoint-input"

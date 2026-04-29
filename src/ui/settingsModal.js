@@ -4,6 +4,7 @@ export function setupSettingsModal({
   closeSettingsBtn,
   settingsProviderSelect,
   providerConfigFields,
+  providerEndpointGroup,
   openrouterConfigFields,
   settingsProviderEndpointInput,
   settingsProviderApiKeyInput,
@@ -15,13 +16,55 @@ export function setupSettingsModal({
   settingsApiKeyError,
   settingsStore,
 }) {
+  const setLabelText = (forAttribute, text) => {
+    const label = document.querySelector(`label[for="${forAttribute}"]`);
+    if (label) label.textContent = text;
+  };
+
+  const providerCopy = {
+    "openai-compatible": {
+      showEndpoint: true,
+      endpointLabel: "Provider Base URL (optional)",
+      endpointPlaceholder: "https://api.openai.com/v1",
+      apiKeyLabel: "Provider API Key",
+      apiKeyPlaceholder: "sk-...",
+      modelLabel: "Provider Model",
+      modelPlaceholder: "gpt-4o-mini",
+    },
+    anthropic: {
+      showEndpoint: true,
+      endpointLabel: "Anthropic Base URL (optional)",
+      endpointPlaceholder: "https://api.anthropic.com/v1",
+      apiKeyLabel: "Anthropic API Key",
+      apiKeyPlaceholder: "sk-ant-...",
+      modelLabel: "Anthropic Model",
+      modelPlaceholder: "claude-sonnet-4-5",
+    },
+  };
+
+  const getEndpointValueForProvider = (provider) => {
+    if (provider === "anthropic") {
+      return settingsStore.getAnthropicBaseUrl?.() || "";
+    }
+    return settingsStore.getCustomBaseUrl();
+  };
+
   const toggleProviderFields = () => {
     const provider = settingsProviderSelect.value;
-    if (provider === "openai-compatible") {
+    if (provider === "openai-compatible" || provider === "anthropic") {
+      const copy = providerCopy[provider];
       providerConfigFields.classList.remove("hidden");
+      providerEndpointGroup?.classList.toggle("hidden", !copy.showEndpoint);
+      settingsProviderEndpointInput.placeholder = copy.endpointPlaceholder;
+      settingsProviderApiKeyInput.placeholder = copy.apiKeyPlaceholder;
+      settingsProviderModelInput.placeholder = copy.modelPlaceholder;
+      setLabelText("settings-provider-endpoint-input", copy.endpointLabel);
+      setLabelText("settings-provider-api-key-input", copy.apiKeyLabel);
+      setLabelText("settings-provider-model-input", copy.modelLabel);
       openrouterConfigFields.classList.add("hidden");
     } else {
       providerConfigFields.classList.add("hidden");
+      providerEndpointGroup?.classList.remove("hidden");
       openrouterConfigFields.classList.remove("hidden");
     }
   };
@@ -30,7 +73,9 @@ export function setupSettingsModal({
     settingsProviderSelect.value = settingsStore.getProvider();
     settingsApiKeyInput.value = settingsStore.getApiKey();
     settingsModelInput.value = settingsStore.getModel();
-    settingsProviderEndpointInput.value = settingsStore.getCustomBaseUrl();
+    settingsProviderEndpointInput.value = getEndpointValueForProvider(
+      settingsProviderSelect.value
+    );
     settingsProviderApiKeyInput.value = settingsStore.getCustomApiKey();
     settingsProviderModelInput.value = settingsStore.getCustomModel();
     toggleProviderFields();
@@ -54,6 +99,9 @@ export function setupSettingsModal({
   });
 
   settingsProviderSelect.addEventListener("change", () => {
+    settingsProviderEndpointInput.value = getEndpointValueForProvider(
+      settingsProviderSelect.value
+    );
     toggleProviderFields();
   });
 
@@ -80,7 +128,13 @@ export function setupSettingsModal({
       settingsStore.setProvider(settingsProviderSelect.value);
     }
 
-    if (providerBaseUrl) {
+    if (settingsProviderSelect.value === "anthropic") {
+      if (providerBaseUrl) {
+        settingsStore.setAnthropicBaseUrl?.(providerBaseUrl);
+      } else {
+        settingsStore.clearAnthropicBaseUrl?.();
+      }
+    } else if (providerBaseUrl) {
       settingsStore.setCustomBaseUrl(providerBaseUrl);
     } else {
       settingsStore.clearCustomBaseUrl();

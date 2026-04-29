@@ -1,5 +1,6 @@
 import { createOpenRouterProvider } from "./openrouterProvider.js";
 import { createOpenAICompatibleProvider } from "./openaiCompatibleProvider.js";
+import { createAnthropicProvider } from "./anthropicProvider.js";
 
 export function createProvider({
   name = "openrouter",
@@ -16,6 +17,8 @@ export function createProvider({
         settingsStore,
         nowProvider,
       });
+    case "anthropic":
+      return createAnthropicProvider({ fetchImpl, settingsStore, nowProvider });
     default:
       throw new Error(`Unknown provider: ${name}`);
   }

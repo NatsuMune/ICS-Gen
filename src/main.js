@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeSettingsBtn: dom.closeSettingsBtn,
     settingsProviderSelect: dom.settingsProviderSelect,
     providerConfigFields: dom.providerConfigFields,
+    providerEndpointGroup: dom.providerEndpointGroup,
     openrouterConfigFields: dom.openrouterConfigFields,
     settingsProviderEndpointInput: dom.settingsProviderEndpointInput,
     settingsProviderApiKeyInput: dom.settingsProviderApiKeyInput,

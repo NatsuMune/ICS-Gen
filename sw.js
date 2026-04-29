@@ -1,8 +1,8 @@
-const CACHE_NAME = "itinerary-assistant-v17";
+const CACHE_NAME = "itinerary-assistant-v20";
 const urlsToCache = [
   "./",
   "./index.html",
-  "./styles/app.css?v=17",
+  "./styles/app.css?v=20",
   "./src/main.js",
   "./src/app/controller.js",
   "./src/app/itineraryService.js",
@@ -11,6 +11,7 @@ const urlsToCache = [
   "./src/infrastructure/settingsStore.js",
   "./src/infrastructure/providers/openrouterProvider.js",
   "./src/infrastructure/providers/openaiCompatibleProvider.js",
+  "./src/infrastructure/providers/anthropicProvider.js",
   "./src/infrastructure/providers/providerFactory.js",
   "./src/ui/apiKeyModal.js",
   "./src/ui/dom.js",
