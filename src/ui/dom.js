@@ -23,7 +23,25 @@ export function getDom() {
     imageName: document.getElementById("image-name"),
     removeImageBtn: document.getElementById("remove-image-btn"),
     apiKeyModal: document.getElementById("api-key-modal"),
+    apiProviderSelect: document.getElementById("api-provider-select"),
+    apiOpenrouterConfigFields: document.getElementById(
+      "api-openrouter-config-fields"
+    ),
+    apiProviderConfigFields: document.getElementById(
+      "api-provider-config-fields"
+    ),
+    apiProviderEndpointGroup: document.getElementById(
+      "api-provider-endpoint-group"
+    ),
+    apiProviderEndpointInput: document.getElementById(
+      "api-provider-endpoint-input"
+    ),
+    apiProviderApiKeyInput: document.getElementById(
+      "api-provider-api-key-input"
+    ),
+    apiProviderModelInput: document.getElementById("api-provider-model-input"),
     apiKeyInput: document.getElementById("api-key-input"),
+    apiModelInput: document.getElementById("api-model-input"),
     saveApiKeyBtn: document.getElementById("save-api-key-btn"),
     apiKeyError: document.getElementById("api-key-error"),
     resetBtn: document.getElementById("reset-btn"),

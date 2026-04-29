@@ -36,11 +36,11 @@ To run ICS-Gen locally, follow these steps:
 
 1.  Clone this repository or download the source files.
 2.  Open the `index.html` file in your web browser.
-3.  On the first launch, a modal will appear. Enter your OpenRouter API key to activate the application's features. The key will be saved in local storage for future sessions.
+3.  On the first launch, a modal will appear. Select OpenRouter, OpenAI-Compatible, or Anthropic, then enter the required API key and model settings. The settings will be saved in local storage for future sessions.
 
-To use an OpenAI-compatible provider, open settings, select **OpenAI-Compatible**, and enter the API key and model. The base URL is optional and defaults to `https://api.openai.com/v1`; if you enter a custom base URL such as `https://api.example.com/v1`, ICS-Gen appends `/chat/completions` when it sends requests.
+To use an OpenAI-compatible provider, select **OpenAI-Compatible** during first launch or from settings, then enter the API key and model. The base URL is optional and defaults to `https://api.openai.com/v1`; if you enter a custom base URL such as `https://api.example.com/v1`, ICS-Gen appends `/chat/completions` when it sends requests.
 
-To use Anthropic directly, open settings, select **Anthropic**, and enter your Anthropic API key and model name. The base URL is optional and defaults to `https://api.anthropic.com/v1`; if you enter a custom base URL, ICS-Gen appends `/messages` when it sends requests.
+To use Anthropic directly, select **Anthropic** during first launch or from settings, then enter your Anthropic API key and model name. The base URL is optional and defaults to `https://api.anthropic.com/v1`; if you enter a custom base URL, ICS-Gen appends `/messages` when it sends requests.
 
 ## 🧪 Development (Bun)
 

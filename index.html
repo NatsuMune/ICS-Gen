@@ -457,28 +457,89 @@
 
     <div id="api-key-modal" class="modal hidden">
       <div class="modal-card">
-        <h2>Enter API Key</h2>
+        <h2>Configure AI Provider</h2>
         <p class="modal-subtitle">
-          Please provide your OpenRouter API key to use this service. Your key
-          is stored securely in your browser's local storage.
+          Choose your AI provider and enter the required credentials. Your
+          settings are stored in your browser's local storage.
         </p>
         <div class="modal-body">
-          <label for="api-key-input" class="field-label"
-            >OpenRouter API Key</label
-          >
-          <input
-            type="password"
-            id="api-key-input"
-            class="field field-input"
-            placeholder="sk-or-v1-..."
-          />
-          <p id="api-key-error" class="field-error hidden">
-            Please enter a valid OpenRouter API key.
-          </p>
+          <div class="field-group">
+            <label for="api-provider-select" class="field-label"
+              >AI Provider</label
+            >
+            <select id="api-provider-select" class="field field-select">
+              <option value="openrouter">OpenRouter</option>
+              <option value="openai-compatible">OpenAI-Compatible</option>
+              <option value="anthropic">Anthropic</option>
+            </select>
+          </div>
+          <div id="api-openrouter-config-fields" class="field-group">
+            <div class="field-group">
+              <label for="api-key-input" class="field-label"
+                >OpenRouter API Key</label
+              >
+              <input
+                type="password"
+                id="api-key-input"
+                class="field field-input"
+                placeholder="sk-or-v1-..."
+              />
+            </div>
+            <div class="field-group">
+              <label for="api-model-input" class="field-label"
+                >Model Name</label
+              >
+              <input
+                type="text"
+                id="api-model-input"
+                class="field field-input"
+                placeholder="nvidia/nemotron-nano-12b-v2-vl:free"
+              />
+              <p class="field-hint">
+                Default: nvidia/nemotron-nano-12b-v2-vl:free
+              </p>
+            </div>
+          </div>
+          <div id="api-provider-config-fields" class="field-group hidden">
+            <div id="api-provider-endpoint-group" class="field-group">
+              <label for="api-provider-endpoint-input" class="field-label"
+                >Provider Base URL (optional)</label
+              >
+              <input
+                type="text"
+                id="api-provider-endpoint-input"
+                class="field field-input"
+                placeholder="https://api.openai.com/v1"
+              />
+            </div>
+            <div class="field-group">
+              <label for="api-provider-api-key-input" class="field-label"
+                >Provider API Key</label
+              >
+              <input
+                type="password"
+                id="api-provider-api-key-input"
+                class="field field-input"
+                placeholder="sk-..."
+              />
+            </div>
+            <div class="field-group">
+              <label for="api-provider-model-input" class="field-label"
+                >Provider Model</label
+              >
+              <input
+                type="text"
+                id="api-provider-model-input"
+                class="field field-input"
+                placeholder="gpt-4o-mini"
+              />
+            </div>
+          </div>
+          <p id="api-key-error" class="field-error hidden"></p>
         </div>
         <div class="modal-actions">
           <button id="save-api-key-btn" class="btn btn-primary">
-            Save and Continue
+            Save Provider
           </button>
         </div>
       </div>

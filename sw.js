@@ -1,8 +1,8 @@
-const CACHE_NAME = "itinerary-assistant-v20";
+const CACHE_NAME = "itinerary-assistant-v21";
 const urlsToCache = [
   "./",
   "./index.html",
-  "./styles/app.css?v=20",
+  "./styles/app.css?v=21",
   "./src/main.js",
   "./src/app/controller.js",
   "./src/app/itineraryService.js",
@@ -48,6 +48,13 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {

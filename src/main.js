@@ -41,10 +41,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupApiKeyModal({
     apiKeyModal: dom.apiKeyModal,
+    apiProviderSelect: dom.apiProviderSelect,
+    apiOpenrouterConfigFields: dom.apiOpenrouterConfigFields,
+    apiProviderConfigFields: dom.apiProviderConfigFields,
+    apiProviderEndpointGroup: dom.apiProviderEndpointGroup,
+    apiProviderEndpointInput: dom.apiProviderEndpointInput,
+    apiProviderApiKeyInput: dom.apiProviderApiKeyInput,
+    apiProviderModelInput: dom.apiProviderModelInput,
     apiKeyInput: dom.apiKeyInput,
+    apiModelInput: dom.apiModelInput,
     saveApiKeyBtn: dom.saveApiKeyBtn,
     apiKeyError: dom.apiKeyError,
     settingsApiKeyInput: dom.settingsApiKeyInput,
+    settingsModelInput: dom.settingsModelInput,
+    settingsProviderSelect: dom.settingsProviderSelect,
+    settingsProviderEndpointInput: dom.settingsProviderEndpointInput,
+    settingsProviderApiKeyInput: dom.settingsProviderApiKeyInput,
+    settingsProviderModelInput: dom.settingsProviderModelInput,
     settingsStore,
   });
 
